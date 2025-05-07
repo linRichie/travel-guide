@@ -527,11 +527,10 @@ const GuangxiTravel = () => {
               <div>© 2025 All Rights Reserved</div>
               <div className="mt-2">
                 <span>created by </span>
-                <a href="https://space.coze.cn" className="text-gray-400 hover:text-orange-500 transition-colors" target="_blank" rel="noopener noreferrer">
-                  coze space
+                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" target="_blank" rel="noopener noreferrer">
+                Wang L. Richie
                 </a>
               </div>
-              <div className="mt-1">页面内容均由 AI 生成，仅供参考</div>
             </div>
           </div>
         </div>

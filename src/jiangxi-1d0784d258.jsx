@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AMapLoader from '@amap/amap-jsapi-loader';
-import { 
+import {
   CalendarDays,
   MapPin,
   Utensils,
@@ -29,13 +29,13 @@ const TravelPlans = () => {
           key: 'd17c17f8f712c81a7e4241aff4faa7b0',
           plugins: ['AMap.Scale']
         });
-        
+
         mapInstance.current = new AMap.Map(mapContainerRef.current, {
           viewMode: '3D',
           zoom: 7,
           center: [115.857, 28.683]
         });
-        
+
         // 添加江西主要景点标记
         const markers = [
           { position: [115.857, 28.683], title: '南昌' },
@@ -47,7 +47,7 @@ const TravelPlans = () => {
           { position: [114.933, 27.117], title: '龙虎山' },
           { position: [114.125, 27.633], title: '武功山' }
         ];
-        
+
         markers.forEach(marker => {
           new AMap.Marker({
             position: marker.position,
@@ -244,7 +244,7 @@ const TravelPlans = () => {
     <div className="min-h-screen bg-black text-white">
       {/* 头部区域 */}
       <header className="relative h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
@@ -259,22 +259,22 @@ const TravelPlans = () => {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
         />
 
-        <div 
-          ref={mapContainerRef} 
+        <div
+          ref={mapContainerRef}
           className="absolute inset-0 w-full h-full opacity-20"
         />
       </header>
 
       {/* 行程方案区域 */}
       <section className="py-20 px-4 max-w-7xl mx-auto">
-        <motion.h2 
+        <motion.h2
           className="text-4xl md:text-6xl font-bold mb-16 text-center"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -339,17 +339,17 @@ const TravelPlans = () => {
             </div>
 
             <div className="flex space-x-6">
-              <a 
-                href="https://x.com/Jone12suny" 
-                target="_blank" 
+              <a
+                href="https://x.com/Jone12suny"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-orange-500 transition-colors"
               >
                 Twitter/X
               </a>
-              <a 
-                href="https://github.com/linRichie" 
-                target="_blank" 
+              <a
+                href="https://github.com/linRichie"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-orange-500 transition-colors"
               >
@@ -359,8 +359,9 @@ const TravelPlans = () => {
           </div>
 
           <div className="mt-12 text-center text-gray-500 text-sm">
-            <p>Created by <a href="https://space.coze.cn" className="text-orange-500 hover:underline">coze space</a></p>
-            <p>页面内容均由 AI 生成，仅供参考</p>
+            <p>© 2025 Wang L. Richie. All rights reserved.</p>
+
+            <p>Created by <a href="#" className="text-orange-500 hover:underline">Wang L. Richie</a></p>
           </div>
         </div>
       </footer>

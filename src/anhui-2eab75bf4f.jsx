@@ -319,7 +319,7 @@ const AnhuiTravelGuide = () => {
           </div>
           
           <div className="mt-8 pt-8 border-t border-white/5 text-center text-white/40 text-xs">
-            <p>created by <a href="https://space.coze.cn" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500 transition-colors">coze space</a> | 页面内容均由 AI 生成，仅供参考</p>
+            <p>created by <a href="#" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500 transition-colors">Wang L. Richie </a></p>
           </div>
         </div>
       </footer>

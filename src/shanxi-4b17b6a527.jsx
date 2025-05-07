@@ -81,7 +81,7 @@ const ShaanxiTravelGuide = () => {
       {/* 导航条 */}
       <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-md p-4 border-b border-orange-500/20">
         <div className="container mx-auto flex justify-between items-center">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="text-2xl font-bold"
@@ -93,9 +93,8 @@ const ShaanxiTravelGuide = () => {
               <button
                 key={item}
                 onClick={() => scrollToSection(item)}
-                className={`${
-                  activeSection === item ? 'text-orange-500' : 'text-gray-400'
-                } hover:text-orange-400 transition-colors uppercase text-sm font-medium`}
+                className={`${activeSection === item ? 'text-orange-500' : 'text-gray-400'
+                  } hover:text-orange-400 transition-colors uppercase text-sm font-medium`}
               >
                 {item}
               </button>
@@ -117,8 +116,8 @@ const ShaanxiTravelGuide = () => {
         <div className="absolute inset-0 flex items-center justify-center opacity-20">
           <div className="w-full h-full bg-[url('https://s.coze.cn/t/reQ4FqZiA-Y/')] bg-cover bg-center"></div>
         </div>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -139,7 +138,7 @@ const ShaanxiTravelGuide = () => {
           </motion.button>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
@@ -150,7 +149,7 @@ const ShaanxiTravelGuide = () => {
             transition={{ repeat: Infinity, duration: 2 }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-500">
-              <path d="M12 5v14M19 12l-7 7-7-7"/>
+              <path d="M12 5v14M19 12l-7 7-7-7" />
             </svg>
           </motion.div>
         </motion.div>
@@ -159,34 +158,34 @@ const ShaanxiTravelGuide = () => {
       {/* 景点统计区 */}
       <section className="py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20"
           >
-            <motion.div 
+            <motion.div
               whileHover={{ y: -10 }}
               className="bg-gray-900/50 border border-orange-500/20 rounded-xl p-6 text-center"
             >
               <div className="text-5xl font-bold text-orange-500 mb-2">20+</div>
               <div className="text-gray-400 uppercase text-sm">热门景点</div>
             </motion.div>
-            <motion.div 
+            <motion.div
               whileHover={{ y: -10 }}
               className="bg-gray-900/50 border border-orange-500/20 rounded-xl p-6 text-center"
             >
               <div className="text-5xl font-bold text-orange-500 mb-2">5</div>
               <div className="text-gray-400 uppercase text-sm">世界遗产</div>
             </motion.div>
-            <motion.div 
+            <motion.div
               whileHover={{ y: -10 }}
               className="bg-gray-900/50 border border-orange-500/20 rounded-xl p-6 text-center"
             >
               <div className="text-5xl font-bold text-orange-500 mb-2">3000+</div>
               <div className="text-gray-400 uppercase text-sm">年历史</div>
             </motion.div>
-            <motion.div 
+            <motion.div
               whileHover={{ y: -10 }}
               className="bg-gray-900/50 border border-orange-500/20 rounded-xl p-6 text-center"
             >
@@ -195,7 +194,7 @@ const ShaanxiTravelGuide = () => {
             </motion.div>
           </motion.div>
 
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -248,7 +247,7 @@ const ShaanxiTravelGuide = () => {
       {/* 行程规划区 */}
       <section id="itinerary" className="py-20 bg-black">
         <div className="container mx-auto px-4">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -292,7 +291,7 @@ const ShaanxiTravelGuide = () => {
       {/* 地图展示区 */}
       <section id="map" className="py-20 bg-gray-900">
         <div className="container mx-auto px-4">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -325,11 +324,11 @@ const ShaanxiTravelGuide = () => {
               <h3 className="text-2xl font-bold mb-2">SHAANXI TRAVEL GUIDE</h3>
               <p className="text-gray-400">探索陕西的千年文化与自然奇观</p>
             </div>
-            
+
             <div className="flex space-x-6 mb-6 md:mb-0">
               <a href="https://x.com/Jone12suny" className="text-gray-400 hover:text-orange-500 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </a>
               <a href="https://github.com/linRichie" className="text-gray-400 hover:text-orange-500 transition-colors">
@@ -339,11 +338,10 @@ const ShaanxiTravelGuide = () => {
               </a>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-            <p>© 2025 SHAANXI TRAVEL GUIDE. All rights reserved.</p>
+            <p>© 2025 Wang L. Richie. All rights reserved.</p>
             <p className="mt-2">Created by Wang L. Richie</p>
-            <p className="mt-4">页面内容均由 AI 生成，仅供参考</p>
           </div>
         </div>
       </footer>

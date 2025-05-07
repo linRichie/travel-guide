@@ -738,13 +738,10 @@ const FujianTravel = () => {
             </div>
             
             <div>
-              <h4 className="text-xl font-bold mb-4">版权信息</h4>
+              {/* <h4 className="text-xl font-bold mb-4">版权信息</h4> */}
               <p className="text-gray-400">© 2025 All Rights Reserved</p>
               <p className="text-gray-400 mt-2">
-                created by <a href="https://space.coze.cn" className="text-orange-500 hover:underline">coze space</a>
-              </p>
-              <p className="text-gray-400 text-sm mt-4">
-                页面内容均由 AI 生成，仅供参考
+                created by <a href="#" className="text-orange-500 hover:underline">Wang L. Richie </a> 
               </p>
             </div>
           </div>

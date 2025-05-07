@@ -773,7 +773,7 @@ const SichuanTravel = () => {
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
             <p>© 2024 Sichuan Travel. All rights reserved.</p>
             <p className="mt-2">
-              <a href="https://space.coze.cn" className="text-orange-500 hover:underline">created by coze space</a> | 页面内容均由 AI 生成，仅供参考
+              <a href="#" className="text-orange-500 hover:underline">created by Wang L. Richie </a> 
             </p>
           </div>
         </div>

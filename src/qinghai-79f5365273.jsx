@@ -291,8 +291,7 @@ const QinghaiTravel = () => {
 
             <div className="text-gray-500 text-sm">
               <p>© 2025 Wang L. Richie. All rights reserved.</p>
-              <p className="mt-1">Created by <a href="https://space.coze.cn" className="text-orange-500 hover:underline">coze space</a></p>
-              <p className="mt-1">页面内容均由 AI 生成，仅供参考</p>
+              <p className="mt-1">Created by <a href="#" className="text-orange-500 hover:underline">Wang L. Richie</a></p>
             </div>
           </div>
         </div>

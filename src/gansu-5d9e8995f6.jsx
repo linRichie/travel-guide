@@ -290,10 +290,10 @@ const GansuTravel = () => {
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center md:text-left">
             <p className="text-gray-500 text-sm">
-              Created by <a href="https://space.coze.cn" className="text-orange-500 hover:underline">coze space</a>
+              Created by <a href="#" className="text-orange-500 hover:underline">Wang L. Richie</a>
             </p>
             <p className="text-gray-500 text-sm mt-2">
-              页面内容均由 AI 生成，仅供参考 © Wang L. Richie 2025
+              © Wang L. Richie 2025
             </p>
           </div>
         </div>
