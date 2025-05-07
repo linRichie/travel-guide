@@ -1,8 +1,5 @@
 # React + Vite 成都旅游指南项目
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
 ## 项目概述
 
 这是一个基于React和Vite构建的成都旅游指南项目，采用现代化前端技术栈。
@@ -39,14 +36,8 @@ travel-guide/
 - 平滑滚动和动画效果
 - 暗色主题UI设计
 
-## 开发说明
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
 ## 待改进点
 
 - 建议将Tailwind CDN改为本地安装
 - 建议将外链图片放入public目录
 - 可考虑添加更多省份的详细页面
-
