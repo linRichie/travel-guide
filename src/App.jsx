@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import HomePage from './components/HomePage';
-import SichuanTravel from './sichuan-3786ef4bc9';
+// import SichuanTravel from './sichuan-3786ef4bc9';
 import ChengduTravelGuide from './chengdu-2025';
 import GuangxiTravel from './guangxi-6eaa24a187';
 import QinghaiTravel from './qinghai-79f5365273';
@@ -44,7 +44,7 @@ function App() {
           <div className="container mx-auto px-6 py-4">
             <div className="flex justify-center space-x-2 overflow-x-auto">
               <NavLink to="/">首页</NavLink>
-              <NavLink to="/sichuan">四川</NavLink>
+              {/* <NavLink to="/sichuan">四川</NavLink> */}
               <NavLink to="/guangxi">广西</NavLink>
               <NavLink to="/chengdu">成都</NavLink>
               <NavLink to="/qinghai">青海</NavLink>
@@ -63,7 +63,7 @@ function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/sichuan" element={<SichuanTravel />} />
+          {/* <Route path="/sichuan" element={<SichuanTravel />} /> */}
           <Route path="/guangxi" element={<GuangxiTravel />} />
           <Route path="/chengdu" element={<ChengduTravelGuide />} />
           <Route path="/qinghai" element={<QinghaiTravel />} />

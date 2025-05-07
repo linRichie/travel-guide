@@ -1,23 +1,32 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages  # 工作流名称，显示在GitHub Actions界面
 
 on:
   push:
-    branches: [main]
+    branches: [main]  # 只在main分支有push操作时触发工作流
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  build-and-deploy:  # 定义一个名为build-and-deploy的作业
+    runs-on: ubuntu-latest  # 使用最新版Ubuntu运行环境
+    
+    # 设置作业权限，允许写入仓库内容
+    permissions:
+      contents: write  # 必须的权限，允许工作流推送代码到gh-pages分支
       
-      - name: Install dependencies
-        run: npm install
+    steps:
+      # 第一步：检出代码
+      - uses: actions/checkout@v4  # 使用官方checkout action检出仓库代码
+      
+      # 第二步：安装项目依赖
+      - name: Install dependencies  # 步骤名称
+        run: npm install  # 执行npm install安装所有依赖包
         
-      - name: Build project
-        run: npm run build
+      # 第三步：构建项目
+      - name: Build project  # 步骤名称
+        run: npm run build  # 执行npm run build构建项目，生成dist目录
         
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+      # 第四步：部署到GitHub Pages
+      - name: Deploy to GitHub Pages  # 步骤名称
+        uses: peaceiris/actions-gh-pages@v3  # 使用第三方action部署到GitHub Pages
+        with:  # 配置参数
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # 使用自动生成的GitHub token进行认证
+          publish_dir: ./dist  # 指定要发布的目录，即构建生成的dist目录

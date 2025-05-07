@@ -11,14 +11,14 @@ import {
 } from 'lucide-react';
 
 const destinations = [
-  {
-    title: "四川省",
-    description: "探索大熊猫故乡，体验川菜与人文风情",
-    icon: Mountain,
-    to: "/sichuan",
-    imageUrl: "https://images.unsplash.com/photo-1505438157249-00e1b44ee34f",
-    className: "col-span-2 row-span-2"
-  },
+  // {
+  //   title: "四川省",
+  //   description: "探索大熊猫故乡，体验川菜与人文风情",
+  //   icon: Mountain,
+  //   to: "/sichuan",
+  //   imageUrl: "https://images.unsplash.com/photo-1505438157249-00e1b44ee34f",
+  //   className: "col-span-2 row-span-2"
+  // },
   {
     title: "广西壮族自治区",
     description: "桂林山水甲天下",
@@ -40,7 +40,7 @@ const destinations = [
     description: "青藏高原的神秘与壮美",
     icon: Mountain,
     to: "/qinghai",
-    imageUrl: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
+    imageUrl: "https://i.pinimg.com/736x/97/2e/71/972e7133dcd9f3beeb4653a09012c900.jpg",
     className: "col-span-1 row-span-1"
   },
   {
@@ -48,7 +48,7 @@ const destinations = [
     description: "红色旅游与自然风光",
     icon: Building,
     to: "/jiangxi",
-    imageUrl: "https://images.unsplash.com/photo-1470004914212-05527e49370b",
+    imageUrl: "https://images.unsplash.com/photo-1704434927473-8ec35cc6bf1b?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     className: "col-span-1 row-span-1"
   },
   {
@@ -56,7 +56,7 @@ const destinations = [
     description: "海上丝绸之路的起点",
     icon: MapPin,
     to: "/fujian",
-    imageUrl: "https://images.unsplash.com/photo-1558005530-a7958896ec60",
+    imageUrl: "https://i.pinimg.com/736x/cf/31/c2/cf31c25d53c24625ef5dde90674aaeed.jpg",
     className: "col-span-1 row-span-1"
   },
   {
@@ -64,7 +64,7 @@ const destinations = [
     description: "丝绸之路上的历史与文化",
     icon: Building,
     to: "/gansu",
-    imageUrl: "https://images.unsplash.com/photo-1566138884190-2dc2e9b2c704",
+    imageUrl: "https://images.unsplash.com/photo-1729581514945-ef3f32fe2e7e?q=80&w=3245&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     className: "col-span-1 row-span-1"
   },
   {
@@ -72,7 +72,7 @@ const destinations = [
     description: "千年古都，文明摇篮",
     icon: Landmark,
     to: "/shaanxi",
-    imageUrl: "https://images.unsplash.com/photo-1528164344705-47542687000d",
+    imageUrl: "https://images.unsplash.com/photo-1569685794205-a8fc87049f5d?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     className: "col-span-1 row-span-1"
   },
   {
@@ -80,7 +80,7 @@ const destinations = [
     description: "黄山云海，徽派建筑",
     icon: Mountain,
     to: "/anhui",
-    imageUrl: "https://images.unsplash.com/photo-1470004914212-05527e49370b",
+    imageUrl: "https://i.pinimg.com/736x/a8/3f/fa/a83ffaffb891dac44cc6b0dc26f424bd.jpg",
     className: "col-span-1 row-span-1"
   },
   {
@@ -88,7 +88,7 @@ const destinations = [
     description: "丝绸之路上的明珠，壮美自然风光",
     icon: Mountain,
     to: "/xinjiang",
-    imageUrl: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9",
+    imageUrl: "https://images.unsplash.com/photo-1569660003459-6c30601dc19c?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     className: "col-span-1 row-span-1"
   },
 ];
