@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import HomePage from './components/HomePage';
 // import SichuanTravel from './sichuan-3786ef4bc9';
-import ChengduTravelGuide from './chengdu-2025';
+import ChengduTravelGuide from './chengdu-8f35e580a2';
 import GuangxiTravel from './guangxi-6eaa24a187';
 import QinghaiTravel from './qinghai-79f5365273';
 import JiangxiTravel from './jiangxi-1d0784d258';
