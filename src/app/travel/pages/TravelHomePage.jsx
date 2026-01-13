@@ -1,108 +1,101 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Mountain, 
-  Building, 
-  Waves, 
+import {
+  Mountain,
+  Building,
+  Waves,
   Coffee,
   MapPin,
   Landmark
 } from 'lucide-react';
 
-const destinations = [
-  // {
-  //   title: "四川省",
-  //   description: "探索大熊猫故乡，体验川菜与人文风情",
-  //   icon: Mountain,
-  //   to: "/sichuan",
-  //   imageUrl: "https://images.unsplash.com/photo-1505438157249-00e1b44ee34f",
-  //   className: "col-span-2 row-span-2"
-  // },
-  {
-    title: "广西壮族自治区",
-    description: "桂林山水甲天下",
-    icon: Waves,
-    to: "/guangxi",
-    imageUrl: "https://images.unsplash.com/photo-1537210249814-b9a10a161ae4",
-    className: "col-span-1 row-span-1"
-  },
-  {
-    title: "成都市",
-    description: "休闲天堂，美食之都",
-    icon: Coffee,
-    to: "/chengdu",
-    imageUrl: "https://images.unsplash.com/photo-1540126034813-121bf29033d2?q=80&w=3272&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    className: "col-span-1 row-span-1"
-  },
-  {
-    title: "青海省",
-    description: "青藏高原的神秘与壮美",
-    icon: Mountain,
-    to: "/qinghai",
-    imageUrl: "https://i.pinimg.com/736x/97/2e/71/972e7133dcd9f3beeb4653a09012c900.jpg",
-    className: "col-span-1 row-span-1"
-  },
-  {
-    title: "江西省",
-    description: "红色旅游与自然风光",
-    icon: Building,
-    to: "/jiangxi",
-    imageUrl: "https://images.unsplash.com/photo-1704434927473-8ec35cc6bf1b?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    className: "col-span-1 row-span-1"
-  },
-  {
-    title: "福建省",
-    description: "海上丝绸之路的起点",
-    icon: MapPin,
-    to: "/fujian",
-    imageUrl: "https://i.pinimg.com/736x/cf/31/c2/cf31c25d53c24625ef5dde90674aaeed.jpg",
-    className: "col-span-1 row-span-1"
-  },
-  {
-    title: "甘肃省",
-    description: "丝绸之路上的历史与文化",
-    icon: Building,
-    to: "/gansu",
-    imageUrl: "https://images.unsplash.com/photo-1729581514945-ef3f32fe2e7e?q=80&w=3245&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    className: "col-span-1 row-span-1"
-  },
-  {
-    title: "陕西省",
-    description: "千年古都，文明摇篮",
-    icon: Landmark,
-    to: "/shaanxi",
-    imageUrl: "https://images.unsplash.com/photo-1569685794205-a8fc87049f5d?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    className: "col-span-1 row-span-1"
-  },
-  {
-    title: "安徽省",
-    description: "黄山云海，徽派建筑",
-    icon: Mountain,
-    to: "/anhui",
-    imageUrl: "https://i.pinimg.com/736x/a8/3f/fa/a83ffaffb891dac44cc6b0dc26f424bd.jpg",
-    className: "col-span-1 row-span-1"
-  },
-  {
-    title: "新疆维吾尔自治区",
-    description: "丝绸之路上的明珠，壮美自然风光",
-    icon: Mountain,
-    to: "/xinjiang",
-    imageUrl: "https://images.unsplash.com/photo-1569660003459-6c30601dc19c?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    className: "col-span-1 row-span-1"
-  },
-];
-
-const HomePage = () => {
-  const scrollToDestinations = () => {
-    const destinationsSection = document.getElementById('destinations');
-    if (destinationsSection) {
-      destinationsSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  };
+/**
+ * 旅游指南首页 - 探索中国
+ */
+const TravelHomePage = () => {
+  const destinations = [
+    {
+      title: "广西壮族自治区",
+      description: "桂林山水甲天下",
+      icon: Waves,
+      to: "/travel/guangxi",
+      imageUrl: "https://images.unsplash.com/photo-1537210249814-b9a10a161ae4",
+      className: "col-span-1 row-span-1"
+    },
+    {
+      title: "成都市",
+      description: "休闲天堂，美食之都",
+      icon: Coffee,
+      to: "/travel/chengdu",
+      imageUrl: "https://images.unsplash.com/photo-1540126034813-121bf29033d2?q=80&w=3272&auto=format&fit=crop",
+      className: "col-span-1 row-span-1"
+    },
+    {
+      title: "青海省",
+      description: "青藏高原的神秘与壮美",
+      icon: Mountain,
+      to: "/travel/qinghai",
+      imageUrl: "https://i.pinimg.com/736x/97/2e/71/972e7133dcd9f3beeb4653a09012c900.jpg",
+      className: "col-span-1 row-span-1"
+    },
+    {
+      title: "江西省",
+      description: "红色旅游与自然风光",
+      icon: Building,
+      to: "/travel/jiangxi",
+      imageUrl: "https://images.unsplash.com/photo-1704434927473-8ec35cc6bf1b?q=80&w=3174&auto=format&fit=crop",
+      className: "col-span-1 row-span-1"
+    },
+    {
+      title: "福建省",
+      description: "海上丝绸之路的起点",
+      icon: MapPin,
+      to: "/travel/fujian",
+      imageUrl: "https://i.pinimg.com/736x/cf/31/c2/cf31c25d53c24625ef5dde90674aaeed.jpg",
+      className: "col-span-1 row-span-1"
+    },
+    {
+      title: "甘肃省",
+      description: "丝绸之路上的历史与文化",
+      icon: Building,
+      to: "/travel/gansu",
+      imageUrl: "https://images.unsplash.com/photo-1729581514945-ef3f32fe2e7e?q=80&w=3245&auto=format&fit=crop",
+      className: "col-span-1 row-span-1"
+    },
+    {
+      title: "陕西省",
+      description: "千年古都，文明摇篮",
+      icon: Landmark,
+      to: "/travel/shaanxi",
+      imageUrl: "https://images.unsplash.com/photo-1569685794205-a8fc87049f5d?q=80&w=3132&auto=format&fit=crop",
+      className: "col-span-1 row-span-1"
+    },
+    {
+      title: "安徽省",
+      description: "黄山云海，徽派建筑",
+      icon: Mountain,
+      to: "/travel/anhui",
+      imageUrl: "https://i.pinimg.com/736x/a8/3f/fa/a83ffaffb891dac44cc6b0dc26f424bd.jpg",
+      className: "col-span-1 row-span-1"
+    },
+    {
+      title: "新疆维吾尔自治区",
+      description: "丝绸之路上的明珠，壮美自然风光",
+      icon: Mountain,
+      to: "/travel/xinjiang",
+      imageUrl: "https://images.unsplash.com/photo-1569660003459-6c30601dc19c?q=80&w=3270&auto=format&fit=crop",
+      className: "col-span-1 row-span-1"
+    },
+    {
+      title: "西藏自治区",
+      description: "世界屋脊，雪域天堂",
+      icon: Mountain,
+      to: "/travel/tibet",
+      imageUrl: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=3270&auto=format&fit=crop",
+      className: "col-span-1 row-span-1"
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -115,11 +108,8 @@ const HomePage = () => {
             loop
             muted
             playsInline
-            poster="https://images.unsplash.com/photo-1551101509-94c08c6a52f7?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            poster="https://images.unsplash.com/photo-1551101509-94c08c6a52f7?q=80&w=3270&auto=format&fit=crop"
           >
-            {/* 
-            https://images.unsplash.com/photo-1545569341-9eb8b30979d9
-            */}
             <source
               src="https://videos.pexels.com/videos/aerial-view-of-a-city-1889482"
               type="video/mp4"
@@ -153,9 +143,9 @@ const HomePage = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <div 
+          <div
             className="animate-bounce cursor-pointer"
-            onClick={scrollToDestinations}
+            onClick={() => document.getElementById('destinations')?.scrollIntoView({ behavior: 'smooth' })}
             role="button"
             aria-label="Scroll to destinations"
           >
@@ -204,7 +194,7 @@ const HomePage = () => {
                   />
                   <div className="absolute inset-0 bg-black/40 transition-all duration-300 hover:bg-black/60" />
                 </div>
-                
+
                 <div className="relative h-full p-6 flex flex-col justify-end">
                   <div className="flex items-center mb-2">
                     {React.createElement(destination.icon, { className: "w-6 h-6 mr-2" })}
@@ -217,8 +207,24 @@ const HomePage = () => {
           ))}
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/10 py-8">
+        <div className="container mx-auto px-4 text-center text-gray-500">
+          <p>© 2025 旅行指南. All rights reserved.</p>
+          <p className="mt-2 text-sm">
+            作者: Richie |
+            <a href="https://x.com/Jone12suny" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-white">
+              Twitter
+            </a> |
+            <a href="https://github.com/linRichie" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-white">
+              GitHub
+            </a>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
 
-export default HomePage;
+export default TravelHomePage;
