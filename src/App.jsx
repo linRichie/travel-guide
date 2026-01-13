@@ -22,12 +22,18 @@ import SichuanTravel from './app/travel/pages/Sichuan';
 
 // 日记模块页面
 import DiaryHome from './app/diary/pages/DiaryHome';
+import About from './app/diary/pages/About';
+import Gallery from './app/diary/pages/Gallery';
+import Planner from './app/diary/pages/Planner';
+import Stats from './app/diary/pages/Stats';
+import BlogList from './app/diary/pages/BlogList';
+import BlogPost from './app/diary/pages/BlogPost';
 
 /**
  * 主应用组件 - 路由配置
  * 实现了 app 目录结构，包含两个主要模块：
  * - /travel: 旅游指南模块（探索中国 + 各省份）
- * - /diary: 旅行日记模块
+ * - /diary: 旅行日记模块（首页、关于、图集、规划、统计、博客）
  */
 function App() {
   return (
@@ -56,6 +62,12 @@ function App() {
         {/* 日记模块 */}
         <Route path="diary/*" element={<DiaryLayout />}>
           <Route index element={<DiaryHome />} />
+          <Route path="about" element={<About />} />
+          <Route path="gallery" element={<Gallery />} />
+          <Route path="planner" element={<Planner />} />
+          <Route path="stats" element={<Stats />} />
+          <Route path="blog" element={<BlogList />} />
+          <Route path="blog/:id" element={<BlogPost />} />
         </Route>
       </Route>
     </Routes>
