@@ -8,30 +8,31 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 const AppLayout = () => {
   const location = useLocation();
 
-  // 判断当前在哪个模块
-  const isInModule = location.pathname.startsWith('/travel') || location.pathname.startsWith('/diary');
+  // 判断当前模块
+  const isTravelModule = location.pathname.startsWith('/travel');
+  const isDiaryModule = location.pathname.startsWith('/diary');
 
   return (
     <div className="min-h-screen bg-black flex flex-col">
       {/* 顶部导航栏 - 模块切换 */}
-      <nav className="w-full bg-black/80 backdrop-blur-lg z-50 border-b border-white/10">
+      <nav className="w-full bg-black/90 backdrop-blur-lg z-50 border-b border-white/10 sticky top-0">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-white">
+            <Link to="/travel" className="flex items-center space-x-2 group">
+              <span className="text-2xl font-bold text-white group-hover:text-orange-400 transition-colors">
                 <span className="text-orange-500">旅行</span>指南
               </span>
             </Link>
 
-            {/* 模块导航 */}
-            <div className="flex space-x-1">
+            {/* 模块导航 - 更明显的切换按钮 */}
+            <div className="flex items-center bg-white/5 rounded-full p-1 border border-white/10">
               <Link
                 to="/travel"
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  location.pathname.startsWith('/travel')
-                    ? 'bg-orange-500/20 text-orange-400'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                className={`px-6 py-2 rounded-full transition-all duration-300 flex items-center font-medium ${
+                  isTravelModule
+                    ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 <i className="fas fa-map-marked-alt mr-2"></i>
@@ -39,10 +40,10 @@ const AppLayout = () => {
               </Link>
               <Link
                 to="/diary"
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  location.pathname.startsWith('/diary')
-                    ? 'bg-orange-500/20 text-orange-400'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                className={`px-6 py-2 rounded-full transition-all duration-300 flex items-center font-medium ${
+                  isDiaryModule
+                    ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/25'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 <i className="fas fa-book mr-2"></i>

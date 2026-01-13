@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 /**
  * 个人旅行日记组件
- * 基于原 personalTravelWebsite.html 转换而来
+ * 与旅游指南保持一致的暗色风格
  * 包含：首页、关于我、旅拍图集、旅行规划、旅行统计、旅行博客
  */
-const PersonalTravelDiary = () => {
+const DiaryHome = () => {
     const [activeSection, setActiveSection] = useState('home');
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -70,60 +71,84 @@ const PersonalTravelDiary = () => {
         switch (activeSection) {
             case 'home':
                 return (
-                    <section className="relative h-screen">
+                    <motion.section
+                        className="relative h-screen"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.8 }}
+                    >
                         <img
                             src="https://picsum.photos/1920/1080"
                             alt="旅行封面"
                             className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                            <div className="text-center text-white">
-                                <h1 className="text-5xl md:text-7xl font-bold mb-4">探索世界的脚步</h1>
-                                <p className="text-xl md:text-2xl mb-8">记录每一段旅程，分享每一份感动</p>
-                                <div className="flex justify-center gap-4">
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <div className="text-center text-white px-4">
+                                <motion.h1
+                                    className="text-5xl md:text-7xl font-bold mb-4"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, delay: 0.2 }}
+                                >
+                                    探索<span className="text-purple-400">世界</span>的脚步
+                                </motion.h1>
+                                <motion.p
+                                    className="text-xl md:text-2xl mb-8 text-gray-200"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, delay: 0.4 }}
+                                >
+                                    记录每一段旅程，分享每一份感动
+                                </motion.p>
+                                <motion.div
+                                    className="flex justify-center gap-4"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, delay: 0.6 }}
+                                >
                                     <button
                                         onClick={() => setActiveSection('gallery')}
-                                        className="bg-white text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors hover:scale-105 transform"
+                                        className="bg-purple-500 text-white px-8 py-3 rounded-lg hover:bg-purple-600 transition-colors hover:scale-105 transform shadow-lg shadow-purple-500/25"
                                     >
                                         浏览图集
                                     </button>
                                     <button
                                         onClick={() => setActiveSection('plan')}
-                                        className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-gray-800 transition-colors hover:scale-105 transform"
+                                        className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-gray-800 transition-colors hover:scale-105 transform"
                                     >
                                         开始规划
                                     </button>
-                                </div>
+                                </motion.div>
                             </div>
                         </div>
-                    </section>
+                    </motion.section>
                 );
 
             case 'about':
                 return (
-                    <section className="min-h-screen py-20 bg-gray-50">
+                    <section className="min-h-screen py-20 bg-black">
                         <div className="max-w-7xl mx-auto px-4">
-                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">关于我</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">关于我</h2>
                             <div className="grid md:grid-cols-2 gap-12 items-center">
                                 <div className="space-y-6">
-                                    <p className="text-gray-600 leading-relaxed text-lg">
+                                    <p className="text-gray-300 leading-relaxed text-lg">
                                         你好！我是一名热爱旅行的摄影师和旅行者。在过去几年里，我走过了20多个国家，
                                         用镜头记录下了世界各地的美好瞬间。我相信旅行不仅是一种探索，更是一种生活态度。
                                     </p>
-                                    <p className="text-gray-600 leading-relaxed text-lg">
+                                    <p className="text-gray-300 leading-relaxed text-lg">
                                         每一次旅行都是一次新的发现，每一次按下快门都是对美好瞬间的永恒定格。
                                         通过这个网站，我希望与大家分享我的旅行经历和摄影作品。
                                     </p>
                                     <div className="flex space-x-4 pt-4">
                                         <a href="https://x.com/Jone12suny" target="_blank" rel="noopener noreferrer"
-                                           className="text-blue-500 hover:text-blue-600 transition-colors">
+                                           className="text-gray-400 hover:text-purple-400 transition-colors">
                                             <i className="fab fa-twitter text-2xl"></i>
                                         </a>
                                         <a href="https://github.com/linRichie" target="_blank" rel="noopener noreferrer"
-                                           className="text-gray-800 hover:text-gray-600 transition-colors">
+                                           className="text-gray-400 hover:text-purple-400 transition-colors">
                                             <i className="fab fa-github text-2xl"></i>
                                         </a>
-                                        <a href="#" className="text-pink-500 hover:text-pink-600 transition-colors">
+                                        <a href="#" className="text-gray-400 hover:text-pink-400 transition-colors">
                                             <i className="fab fa-instagram text-2xl"></i>
                                         </a>
                                     </div>
@@ -142,14 +167,14 @@ const PersonalTravelDiary = () => {
 
             case 'gallery':
                 return (
-                    <section className="min-h-screen py-20 bg-gray-50">
+                    <section className="min-h-screen py-20 bg-black">
                         <div className="max-w-7xl mx-auto px-4">
-                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">旅拍图集</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">旅拍图集</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {galleryItems.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="group bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                                        className="group bg-gray-900/50 border border-white/10 rounded-lg overflow-hidden hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-2"
                                     >
                                         <div className="overflow-hidden">
                                             <img
@@ -159,8 +184,8 @@ const PersonalTravelDiary = () => {
                                             />
                                         </div>
                                         <div className="p-4">
-                                            <h3 className="font-bold text-lg mb-2 text-gray-800">{item.title}</h3>
-                                            <p className="text-gray-600">{item.location}</p>
+                                            <h3 className="font-bold text-lg mb-2 text-white">{item.title}</h3>
+                                            <p className="text-gray-400">{item.location}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -171,39 +196,39 @@ const PersonalTravelDiary = () => {
 
             case 'plan':
                 return (
-                    <section className="min-h-screen py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+                    <section className="min-h-screen py-20 bg-gradient-to-br from-gray-900 to-purple-900/30">
                         <div className="max-w-3xl mx-auto px-4">
-                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">旅行规划</h2>
-                            <div className="bg-white rounded-2xl shadow-xl p-8">
+                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">旅行规划</h2>
+                            <div className="bg-gray-900/80 border border-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-8">
                                 <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                                     <div>
-                                        <label className="block text-gray-700 mb-2 font-medium">目的地</label>
+                                        <label className="block text-gray-300 mb-2 font-medium">目的地</label>
                                         <input
                                             type="text"
                                             placeholder="你想去哪里？"
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                            className="w-full px-4 py-3 bg-black/50 border border-white/10 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all placeholder-gray-500"
                                         />
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label className="block text-gray-700 mb-2 font-medium">出发日期</label>
+                                            <label className="block text-gray-300 mb-2 font-medium">出发日期</label>
                                             <input
                                                 type="date"
-                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                                className="w-full px-4 py-3 bg-black/50 border border-white/10 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-gray-700 mb-2 font-medium">旅行天数</label>
+                                            <label className="block text-gray-300 mb-2 font-medium">旅行天数</label>
                                             <input
                                                 type="number"
                                                 placeholder="天数"
-                                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                                className="w-full px-4 py-3 bg-black/50 border border-white/10 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all placeholder-gray-500"
                                             />
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-gray-700 mb-2 font-medium">预算范围</label>
-                                        <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+                                        <label className="block text-gray-300 mb-2 font-medium">预算范围</label>
+                                        <select className="w-full px-4 py-3 bg-black/50 border border-white/10 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
                                             <option>经济型 (5000以下)</option>
                                             <option>舒适型 (5000-10000)</option>
                                             <option>豪华型 (10000以上)</option>
@@ -211,7 +236,7 @@ const PersonalTravelDiary = () => {
                                     </div>
                                     <button
                                         type="submit"
-                                        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 hover:scale-[1.02] transform font-medium"
+                                        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 hover:scale-[1.02] transform font-medium shadow-lg shadow-purple-500/25"
                                     >
                                         <i className="fas fa-magic mr-2"></i>
                                         生成旅行计划
@@ -228,14 +253,14 @@ const PersonalTravelDiary = () => {
 
             case 'stats':
                 return (
-                    <section className="min-h-screen py-20 bg-gray-50">
+                    <section className="min-h-screen py-20 bg-black">
                         <div className="max-w-7xl mx-auto px-4">
-                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">旅行统计</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">旅行统计</h2>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                                 {statsData.map((stat) => (
                                     <div
                                         key={stat.id}
-                                        className={`bg-gradient-to-br ${stat.color} text-white rounded-2xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}
+                                        className={`bg-gradient-to-br ${stat.color} text-white rounded-2xl p-8 text-center shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-2`}
                                     >
                                         <i className={`fas ${stat.icon} text-5xl mb-4 opacity-90`}></i>
                                         <h3 className="text-4xl font-bold mb-2">{stat.value}</h3>
@@ -243,11 +268,11 @@ const PersonalTravelDiary = () => {
                                     </div>
                                 ))}
                             </div>
-                            <div className="bg-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
-                                <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">旅行足迹地图</h3>
-                                <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl p-8 text-center">
+                            <div className="bg-gray-900/50 border border-white/10 rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
+                                <h3 className="text-2xl font-bold text-white mb-6 text-center">旅行足迹地图</h3>
+                                <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 border border-white/5 rounded-xl p-8 text-center">
                                     <i className="fas fa-map-marked-alt text-6xl text-purple-400 mb-4"></i>
-                                    <p className="text-gray-600">地图功能即将上线，敬请期待...</p>
+                                    <p className="text-gray-400">地图功能即将上线，敬请期待...</p>
                                 </div>
                             </div>
                         </div>
@@ -256,9 +281,9 @@ const PersonalTravelDiary = () => {
 
             case 'blog':
                 return (
-                    <section className="min-h-screen py-20 bg-gray-50">
+                    <section className="min-h-screen py-20 bg-black">
                         <div className="max-w-4xl mx-auto px-4">
-                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">旅行博客</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">旅行博客</h2>
                             <div className="relative">
                                 {/* 时间线 */}
                                 <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 to-blue-500"></div>
@@ -274,13 +299,13 @@ const PersonalTravelDiary = () => {
                                             }`}>
                                                 <i className="fas fa-feather-alt text-white text-sm"></i>
                                             </div>
-                                            <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                                                <h3 className="text-xl font-bold text-gray-800 mb-2">{post.title}</h3>
+                                            <div className="bg-gray-900/50 border border-white/10 rounded-xl shadow-lg p-6 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300">
+                                                <h3 className="text-xl font-bold text-white mb-2">{post.title}</h3>
                                                 <p className="text-gray-500 mb-3">
                                                     <i className="far fa-calendar-alt mr-1"></i>{post.date}
                                                 </p>
-                                                <p className="text-gray-600">{post.content}</p>
-                                                <button className="mt-4 text-purple-600 hover:text-purple-700 font-medium transition-colors">
+                                                <p className="text-gray-400">{post.content}</p>
+                                                <button className="mt-4 text-purple-400 hover:text-purple-300 font-medium transition-colors">
                                                     阅读更多 <i className="fas fa-arrow-right ml-1"></i>
                                                 </button>
                                             </div>
@@ -298,37 +323,30 @@ const PersonalTravelDiary = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans">
-            {/* 导航栏 */}
-            <nav className="bg-white shadow-lg fixed w-full z-50 top-0 left-0">
+        <div className="min-h-screen bg-black font-sans">
+            {/* 内部导航栏 - 日记页面的区块切换，与旅游指南保持一致 */}
+            <nav className="bg-black/90 backdrop-blur-lg z-40 border-b border-white/10 sticky top-0">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="flex justify-between items-center h-16">
-                        <div className="flex items-center">
-                            <Link to="/" className="flex items-center">
-                                <i className="fas fa-plane-departure text-2xl text-blue-500 mr-2"></i>
-                                <span className="text-xl font-bold text-gray-800">旅行日记</span>
-                            </Link>
-                        </div>
-                        {/* 桌面端导航 */}
-                        <div className="hidden md:flex space-x-8">
+                        <div className="hidden md:flex space-x-1 bg-white/5 rounded-full p-1 border border-white/10">
                             {navItems.map((item) => (
                                 <button
                                     key={item.id}
                                     onClick={() => setActiveSection(item.id)}
-                                    className={`nav-link transition-colors font-medium ${
+                                    className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center font-medium text-sm ${
                                         activeSection === item.id
-                                            ? 'text-blue-500'
-                                            : 'text-gray-600 hover:text-blue-500'
+                                            ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/25'
+                                            : 'text-gray-400 hover:text-white'
                                     }`}
                                 >
-                                    <i className={`fas ${item.icon} mr-1`}></i>
+                                    <i className={`fas ${item.icon} mr-2`}></i>
                                     {item.label}
                                 </button>
                             ))}
                         </div>
                         {/* 移动端菜单按钮 */}
                         <button
-                            className="md:hidden text-gray-600"
+                            className="md:hidden text-gray-400"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
                             <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'} text-2xl`}></i>
@@ -339,7 +357,7 @@ const PersonalTravelDiary = () => {
 
             {/* 移动端菜单 */}
             {mobileMenuOpen && (
-                <div className="md:hidden fixed top-16 right-0 bottom-0 w-64 bg-white shadow-xl z-50 p-4">
+                <div className="md:hidden fixed top-16 right-0 bottom-0 w-64 bg-black/95 backdrop-blur-lg border-l border-white/10 z-50 p-4">
                     <div className="space-y-4">
                         {navItems.map((item) => (
                             <button
@@ -348,10 +366,10 @@ const PersonalTravelDiary = () => {
                                     setActiveSection(item.id);
                                     setMobileMenuOpen(false);
                                 }}
-                                className={`block w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                                className={`block w-full text-left px-4 py-3 rounded-lg transition-colors ${
                                     activeSection === item.id
-                                        ? 'bg-blue-50 text-blue-500'
-                                        : 'text-gray-600 hover:bg-gray-50'
+                                        ? 'bg-purple-500 text-white'
+                                        : 'text-gray-400 hover:bg-white/5'
                                 }`}
                             >
                                 <i className={`fas ${item.icon} mr-2`}></i>
@@ -363,58 +381,69 @@ const PersonalTravelDiary = () => {
             )}
 
             {/* 主内容区域 */}
-            <main className="pt-16">
+            <main>
                 {renderActiveSection()}
             </main>
 
-            {/* 页脚 */}
-            <footer className="bg-gray-800 text-white py-12">
+            {/* 页脚 - 与旅游指南保持一致的暗色风格 */}
+            <footer className="border-t border-white/10 py-12 mt-20">
                 <div className="max-w-7xl mx-auto px-4">
-                    <div className="grid md:grid-cols-3 gap-8">
+                    {/* 返回旅游指南按钮 */}
+                    <div className="flex justify-center mb-8">
+                        <Link
+                            to="/travel"
+                            className="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-orange-500/25"
+                        >
+                            <i className="fas fa-map-marked-alt mr-2"></i>
+                            返回旅游指南
+                        </Link>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8 mb-8">
                         <div>
-                            <h3 className="text-xl font-bold mb-4">联系方式</h3>
-                            <p className="text-gray-400">
+                            <h3 className="text-xl font-bold mb-4 text-white">联系方式</h3>
+                            <p className="text-gray-500">
                                 <i className="fas fa-envelope mr-2"></i>email@example.com<br/>
                                 <i className="fas fa-phone mr-2"></i>+86 123 4567 8900
                             </p>
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold mb-4">关注我</h3>
+                            <h3 className="text-xl font-bold mb-4 text-white">关注我</h3>
                             <div className="flex space-x-4">
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                <a href="#" className="text-gray-500 hover:text-purple-400 transition-colors">
                                     <i className="fab fa-weixin text-2xl"></i>
                                 </a>
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                <a href="#" className="text-gray-500 hover:text-purple-400 transition-colors">
                                     <i className="fab fa-weibo text-2xl"></i>
                                 </a>
                                 <a href="https://x.com/Jone12suny" target="_blank" rel="noopener noreferrer"
-                                   className="text-gray-400 hover:text-white transition-colors">
+                                   className="text-gray-500 hover:text-purple-400 transition-colors">
                                     <i className="fab fa-twitter text-2xl"></i>
                                 </a>
                             </div>
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold mb-4">订阅更新</h3>
+                            <h3 className="text-xl font-bold mb-4 text-white">订阅更新</h3>
                             <form className="flex">
                                 <input
                                     type="email"
                                     placeholder="输入邮箱地址"
-                                    className="px-4 py-2 rounded-l-lg w-full text-gray-800 focus:outline-none"
+                                    className="px-4 py-2 rounded-l-lg w-full bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-1 focus:ring-purple-500 placeholder-gray-500"
                                 />
-                                <button className="bg-blue-500 px-4 py-2 rounded-r-lg hover:bg-blue-600 transition-colors">
+                                <button className="bg-purple-500 px-4 py-2 rounded-r-lg hover:bg-purple-600 transition-colors">
                                     订阅
                                 </button>
                             </form>
                         </div>
                     </div>
-                    <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                    <div className="pt-8 border-t border-white/10 text-center text-gray-500">
                         <p>&copy; 2025 我的旅行日记. All rights reserved.</p>
                         <p className="mt-2 text-sm">
                             作者: Richie |
-                            <a href="https://x.com/Jone12suny" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-white">
+                            <a href="https://x.com/Jone12suny" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-purple-400">
                                 Twitter
                             </a> |
-                            <a href="https://github.com/linRichie" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-white">
+                            <a href="https://github.com/linRichie" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-purple-400">
                                 GitHub
                             </a>
                         </p>
@@ -425,4 +454,4 @@ const PersonalTravelDiary = () => {
     );
 };
 
-export default PersonalTravelDiary;
+export default DiaryHome;
