@@ -17,8 +17,11 @@ import {
   ShoppingCart,
   Gift
 } from 'lucide-react';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 const TravelPlans = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const mapContainerRef = useRef(null);
   const mapInstance = useRef(null);
 
@@ -241,7 +244,7 @@ const TravelPlans = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-black text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* 头部区域 */}
       <header className="relative h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden">
         <motion.div
@@ -260,7 +263,7 @@ const TravelPlans = () => {
         </motion.div>
 
         <motion.div
-          className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-0"
+          className={`absolute inset-0 bg-gradient-to-t via-transparent to-transparent z-0 ${isDark ? 'from-black' : 'from-gray-600'}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
@@ -288,7 +291,7 @@ const TravelPlans = () => {
           {plans.map((plan, index) => (
             <motion.div
               key={plan.id}
-              className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-orange-500 transition-all duration-300"
+              className={`rounded-xl overflow-hidden border hover:border-orange-500 transition-all duration-300 ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'}`}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -314,7 +317,7 @@ const TravelPlans = () => {
                               {activity.icon}
                             </div>
                             <div>
-                              <div className="text-sm text-gray-400">{activity.time}</div>
+                              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{activity.time}</div>
                               <div>{activity.desc}</div>
                             </div>
                           </div>
@@ -330,12 +333,12 @@ const TravelPlans = () => {
       </section>
 
       {/* 页脚区域 */}
-      <footer className="py-12 px-4 border-t border-gray-800">
+      <footer className={`py-12 px-4 border-t ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
               <div className="text-2xl font-bold mb-2">Jiangxi Travel</div>
-              <div className="text-gray-400">© 2025 All Rights Reserved</div>
+              <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>© 2025 All Rights Reserved</div>
             </div>
 
             <div className="flex space-x-6">
@@ -343,7 +346,8 @@ const TravelPlans = () => {
                 href="https://x.com/Jone12suny"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-orange-500 transition-colors"
+                className={isDark ? 'text-gray-400 hover:text-orange-500' : 'text-gray-600 hover:text-orange-500'}
+                className="transition-colors"
               >
                 Twitter/X
               </a>
@@ -351,14 +355,15 @@ const TravelPlans = () => {
                 href="https://github.com/linRichie"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-orange-500 transition-colors"
+                className={isDark ? 'text-gray-400 hover:text-orange-500' : 'text-gray-600 hover:text-orange-500'}
+                className="transition-colors"
               >
                 GitHub
               </a>
             </div>
           </div>
 
-          <div className="mt-12 text-center text-gray-500 text-sm">
+          <div className={`mt-12 text-center text-sm ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>
             <p>© 2025 Wang L. Richie. All rights reserved.</p>
 
             <p>Created by <a href="#" className="text-orange-500 hover:underline">Wang L. Richie</a></p>

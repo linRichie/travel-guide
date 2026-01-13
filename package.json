@@ -19,7 +19,8 @@
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.2",
-    "recharts": "^2.15.3"
+    "recharts": "^2.15.3",
+    "sql.js": "^1.13.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

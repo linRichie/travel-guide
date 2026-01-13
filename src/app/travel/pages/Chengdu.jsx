@@ -30,9 +30,12 @@ import {
   Twitter,
   Github
 } from 'lucide-react';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 
 const ChengduTravelGuide = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [activeTab, setActiveTab] = useState('history');
   const [expandedDays, setExpandedDays] = useState([true, true, true, true]);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -529,9 +532,9 @@ const ChengduTravelGuide = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5] font-sans text-[#333333]">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-black text-white' : 'bg-[#F5F5F5] text-[#333333]'}`}>
       {/* 导航栏 */}
-      <nav className="sticky top-0 z-50 bg-white shadow-sm p-4">
+      <nav className={`sticky top-0 z-50 shadow-sm p-4 ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-[#333333]'}`}>
         <div className="container mx-auto flex justify-between items-center">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -766,7 +769,7 @@ const ChengduTravelGuide = () => {
       </main>
 
       {/* 页脚 */}
-      <footer className="bg-[#2A5C42] text-white py-12">
+      <footer className={`${isDark ? 'bg-[#2A5C42]' : 'bg-[#1e4431]'} text-white py-12`}>
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">

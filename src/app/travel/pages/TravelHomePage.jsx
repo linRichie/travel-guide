@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../../contexts/ThemeContext';
 import {
   Mountain,
   Building,
@@ -14,6 +15,9 @@ import {
  * 旅游指南首页 - 探索中国
  */
 const TravelHomePage = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const destinations = [
     {
       title: "广西壮族自治区",
@@ -98,7 +102,7 @@ const TravelHomePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-black text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center">
         <div className="absolute inset-0 overflow-hidden">
@@ -128,7 +132,7 @@ const TravelHomePage = () => {
             探索<span className="text-orange-500">中国</span>
           </motion.h1>
           <motion.p
-            className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto"
+            className={`text-xl md:text-2xl max-w-2xl mx-auto transition-colors duration-300 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -200,7 +204,7 @@ const TravelHomePage = () => {
                     {React.createElement(destination.icon, { className: "w-6 h-6 mr-2" })}
                     <h3 className="text-2xl font-bold">{destination.title}</h3>
                   </div>
-                  <p className="text-gray-300">{destination.description}</p>
+                  <p className={isDark ? "text-gray-300" : "text-gray-200"}>{destination.description}</p>
                 </div>
               </Link>
             </motion.div>
@@ -209,15 +213,15 @@ const TravelHomePage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-8">
-        <div className="container mx-auto px-4 text-center text-gray-500">
+      <footer className={`border-t py-8 transition-colors duration-300 ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+        <div className={`container mx-auto px-4 text-center transition-colors duration-300 ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>
           <p>© 2025 旅行指南. All rights reserved.</p>
           <p className="mt-2 text-sm">
             作者: Richie |
-            <a href="https://x.com/Jone12suny" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-white">
+            <a href="https://x.com/Jone12suny" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-orange-500">
               Twitter
             </a> |
-            <a href="https://github.com/linRichie" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-white">
+            <a href="https://github.com/linRichie" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-orange-500">
               GitHub
             </a>
           </p>

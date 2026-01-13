@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* === 暗黑模式样式（默认） === */
 :root {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.5;
@@ -16,8 +17,20 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #000;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* === 明亮模式样式 === */
+.light {
+  color-scheme: light;
+}
+
+.light body {
+  background-color: #f9fafb;
+  color: rgba(17, 24, 39, 0.87);
+}
+
+/* === 通用组件样式（暗黑模式） === */
 .spot-card {
   @apply bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 rounded-xl overflow-hidden;
   height: 200px;
@@ -48,4 +61,32 @@ body {
 .map-container {
   @apply h-[600px] rounded-xl overflow-hidden border border-gray-800/50 backdrop-blur-sm;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+/* === 明亮模式覆盖样式 === */
+.light .spot-card {
+  @apply bg-white border-gray-200;
+}
+
+.light .spot-card:hover {
+  @apply border-orange-400;
+  box-shadow: 0 4px 20px rgba(234, 88, 12, 0.15);
+}
+
+.light .travel-plan-card {
+  @apply bg-white border-gray-200;
+}
+
+.light .travel-plan-card:hover {
+  @apply border-orange-400;
+  box-shadow: 0 4px 20px rgba(234, 88, 12, 0.15);
+}
+
+.light .section-description {
+  @apply text-gray-600;
+}
+
+.light .map-container {
+  @apply border-gray-300;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }

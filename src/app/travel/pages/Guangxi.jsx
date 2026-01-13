@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import { ChevronRight, MapPin, Calendar, Sun, Moon, Plane, Train, Ship, Bus, Utensils, Hotel, Camera } from 'lucide-react';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 const GuangxiTravel = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [activeTab, setActiveTab] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const mapContainerRef = useRef(null);
@@ -416,11 +419,11 @@ const GuangxiTravel = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white pt-20"> {/* 添加 pt-20 为主导航栏留出空间 */}
+    <div className={`min-h-screen transition-colors duration-300 pt-20 ${isDark ? 'bg-black text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* 导航栏 */}
       <motion.nav
         className={`sticky top-20 left-0 right-0 z-10 py-4 px-6 transition-all duration-300 ${
-          isScrolled ? 'bg-black/90 backdrop-blur-md' : 'bg-transparent'
+          isScrolled ? (isDark ? 'bg-black/90 backdrop-blur-md' : 'bg-white/90 backdrop-blur-md') : 'bg-transparent'
         }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -441,7 +444,7 @@ const GuangxiTravel = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(index)}
                 className={`relative py-2 px-1 text-sm font-medium transition-colors ${
-                  activeTab === index ? 'text-orange-500' : 'text-gray-400 hover:text-white'
+                  activeTab === index ? 'text-orange-500' : (isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900')
                 }`}
                 whileHover={{ scale: 1.05 }}
               >
@@ -455,7 +458,7 @@ const GuangxiTravel = () => {
               </motion.button>
             ))}
           </div>
-          <button className="md:hidden text-white">
+          <button className={`md:hidden ${isDark ? 'text-white' : 'text-gray-900'}`}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -474,9 +477,9 @@ const GuangxiTravel = () => {
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-4">
               <span className="text-orange-500">广西</span>7日游
-              <span className="block text-2xl md:text-3xl text-gray-400 mt-2">GUANGXI 7-DAY ITINERARY</span>
+              <span className={`block text-2xl md:text-3xl mt-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>GUANGXI 7-DAY ITINERARY</span>
             </h1>
-            <p className="text-lg text-gray-400 max-w-3xl">
+            <p className={`text-lg max-w-3xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
               探索中国南方的喀斯特地貌、田园风光和滨海风情。三套精心设计的行程方案，满足不同旅行偏好。
             </p>
           </motion.div>
@@ -489,7 +492,7 @@ const GuangxiTravel = () => {
               <motion.button
                 key={tab.id}
                 onClick={() => setActiveTab(index)}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === index ? 'bg-orange-500 text-black' : 'bg-gray-800 text-white'}`}
+                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === index ? 'bg-orange-500 text-black' : (isDark ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-900')}`}
                 whileHover={{ scale: 1.05 }}
               >
                 {tab.title}
@@ -509,20 +512,20 @@ const GuangxiTravel = () => {
           >
             <h2 className="text-3xl font-bold mb-8 flex items-center">
               <span className="text-orange-500 mr-2">方案 {activeTab + 1}</span>
-              <span className="text-xl text-gray-400">{tabs[activeTab]?.subtitle}</span>
+              <span className={`text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{tabs[activeTab]?.subtitle}</span>
             </h2>
 
             <div className="grid grid-cols-1 gap-8">
               {itineraries[activeTab]?.map((dayPlan) => (
                 <motion.div
                   key={dayPlan.day}
-                  className="bg-gray-900 rounded-xl overflow-hidden"
+                  className={`rounded-xl overflow-hidden ${isDark ? 'bg-gray-900' : 'bg-white border border-gray-200'}`}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                   viewport={{ once: true, margin: "-100px" }}
                 >
-                  <div className="p-6 border-b border-gray-800">
+                  <div className={`p-6 border-b ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
                     <div className="flex items-center">
                       <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 mr-4">
                         <span className="text-xl font-bold">{dayPlan.day}</span>
@@ -530,7 +533,7 @@ const GuangxiTravel = () => {
                       <h3 className="text-2xl font-bold">{dayPlan.title}</h3>
                     </div>
                   </div>
-                  <div className="divide-y divide-gray-800">
+                  <div className={`divide-y ${isDark ? 'divide-gray-800' : 'divide-gray-200'}`}>
                     {dayPlan.activities.map((activity, index) => (
                       <motion.div
                         key={index}
@@ -547,7 +550,7 @@ const GuangxiTravel = () => {
                             <span className="text-orange-500 font-medium">{activity.time}</span>
                             <ChevronRight className="w-4 h-4 mx-2 text-gray-500" />
                           </div>
-                          <p className="text-gray-300">{activity.content}</p>
+                          <p className={isDark ? 'text-gray-300' : 'text-gray-700'}>{activity.content}</p>
                         </div>
                       </motion.div>
                     ))}
@@ -568,9 +571,9 @@ const GuangxiTravel = () => {
           >
             <h2 className="text-3xl font-bold mb-8">
               <span className="text-orange-500">行程</span>地图
-              <span className="block text-xl text-gray-400 mt-2">ITINERARY MAP</span>
+              <span className={`block text-xl mt-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>ITINERARY MAP</span>
             </h2>
-            <div className="bg-gray-900 rounded-xl overflow-hidden h-[600px] border border-gray-800">
+            <div className={`rounded-xl overflow-hidden h-[600px] border ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'}`}>
               <div ref={mapContainerRef} className="w-full h-full"></div>
             </div>
           </motion.div>
@@ -578,25 +581,25 @@ const GuangxiTravel = () => {
       </main>
 
       {/* 页脚 */}
-      <footer className="bg-gray-900 py-12">
+      <footer className={`py-12 ${isDark ? 'bg-gray-900' : 'bg-gray-100'}`}>
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
               <h3 className="text-xl font-bold mb-2">Wang L. Richie</h3>
               <div className="flex space-x-4">
-                <a href="https://x.com/Jone12suny" className="text-gray-400 hover:text-orange-500 transition-colors" target="_blank" rel="noopener noreferrer">
+                <a href="https://x.com/Jone12suny" className={isDark ? 'text-gray-400 hover:text-orange-500' : 'text-gray-600 hover:text-orange-500'} target="_blank" rel="noopener noreferrer" className="transition-colors">
                   Twitter/X
                 </a>
-                <a href="https://github.com/linRichie" className="text-gray-400 hover:text-orange-500 transition-colors" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/linRichie" className={isDark ? 'text-gray-400 hover:text-orange-500' : 'text-gray-600 hover:text-orange-500'} target="_blank" rel="noopener noreferrer" className="transition-colors">
                   GitHub
                 </a>
               </div>
             </div>
-            <div className="text-gray-500 text-sm">
+            <div className={`${isDark ? 'text-gray-500' : 'text-gray-600'} text-sm`}>
               <div>© 2025 Wang L. Richie All Rights Reserved</div>
               <div className="mt-2">
                 <span>created by </span>
-                <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" target="_blank" rel="noopener noreferrer">
+                <a href="#" className={isDark ? 'text-gray-400 hover:text-orange-500' : 'text-gray-600 hover:text-orange-500'} className="transition-colors" target="_blank" rel="noopener noreferrer">
                 Wang L. Richie
                 </a>
               </div>

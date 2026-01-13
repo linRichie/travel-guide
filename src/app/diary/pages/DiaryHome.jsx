@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 /**
  * 旅行日记首页
  * Hero banner + 导航卡片
  */
 const DiaryHome = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const navCards = [
     {
       id: 'about',
@@ -91,7 +95,11 @@ const DiaryHome = () => {
             {navCards.map((card, index) => (
               <Link key={card.id} to={card.to}>
                 <motion.div
-                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20"
+                  className={`backdrop-blur-sm border rounded-xl p-6 transition-all hover:scale-105 hover:shadow-xl ${
+                    isDark
+                      ? 'bg-white/5 border-white/10 hover:bg-white/10 hover:shadow-purple-500/20'
+                      : 'bg-white/80 border-gray-200 hover:bg-white hover:shadow-purple-500/30'
+                  }`}
                   whileHover={{ y: -5 }}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -100,8 +108,8 @@ const DiaryHome = () => {
                   <div className={`w-12 h-12 bg-gradient-to-br ${card.color} rounded-full flex items-center justify-center mx-auto mb-3`}>
                     <i className={`fas ${card.icon} text-white`}></i>
                   </div>
-                  <h3 className="text-white font-semibold mb-1">{card.title}</h3>
-                  <p className="text-gray-400 text-sm">{card.description}</p>
+                  <h3 className={`font-semibold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{card.title}</h3>
+                  <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{card.description}</p>
                 </motion.div>
               </Link>
             ))}

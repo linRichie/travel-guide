@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, MapPin, Mountain, Camera, Utensils, Hotel, ArrowRight } from 'lucide-react';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 const QinghaiTravel = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [activeDay, setActiveDay] = useState(1);
   const containerRef = useRef(null);
   const [scrollY, setScrollY] = useState(0);
@@ -102,7 +105,7 @@ const QinghaiTravel = () => {
   }, [activeDay]);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-black text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Hero Section */}
       <div className="h-screen flex flex-col justify-center items-center relative overflow-hidden">
         <motion.div 
@@ -114,7 +117,7 @@ const QinghaiTravel = () => {
           <h1 className="text-6xl md:text-8xl font-bold mb-6 text-orange-500">
             青海7日
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8">
+          <p className={`text-xl md:text-2xl mb-8 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
             MAY 2025 · 7 DAYS · 5 DESTINATIONS
           </p>
           <motion.div
@@ -152,8 +155,8 @@ const QinghaiTravel = () => {
                 }}
                 className="relative group"
               >
-                <div className={`w-4 h-4 rounded-full transition-all duration-300 ${activeDay === day.day ? 'bg-orange-500 scale-125' : 'bg-gray-600'}`}></div>
-                <div className={`absolute left-8 top-1/2 transform -translate-y-1/2 text-left transition-all duration-300 ${activeDay === day.day ? 'opacity-100 scale-100 text-orange-500' : 'opacity-0 scale-90 text-gray-400'}`}>
+                <div className={`w-4 h-4 rounded-full transition-all duration-300 ${activeDay === day.day ? 'bg-orange-500 scale-125' : (isDark ? 'bg-gray-600' : 'bg-gray-400')}`}></div>
+                <div className={`absolute left-8 top-1/2 transform -translate-y-1/2 text-left transition-all duration-300 ${activeDay === day.day ? 'opacity-100 scale-100 text-orange-500' : (isDark ? 'opacity-0 scale-90 text-gray-400' : 'opacity-0 scale-90 text-gray-500')}`}>
                   <span className="text-xl font-bold">DAY {day.day}</span>
                 </div>
               </button>
@@ -183,7 +186,7 @@ const QinghaiTravel = () => {
 
                 <div className="relative">
                   {/* Vertical Line */}
-                  <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-gray-800"></div>
+                  <div className={`absolute left-5 top-0 bottom-0 w-0.5 ${isDark ? 'bg-gray-800' : 'bg-gray-300'}`}></div>
 
                   {day.highlights.map((highlight, index) => (
                     <motion.div
@@ -195,7 +198,7 @@ const QinghaiTravel = () => {
                       className="flex items-start mb-12 group"
                     >
                       {/* Time Dot */}
-                      <div className="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-gray-900 border-2 border-orange-500 flex items-center justify-center mr-6">
+                      <div className={`relative z-10 flex-shrink-0 w-10 h-10 rounded-full border-2 border-orange-500 flex items-center justify-center mr-6 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
                         <div className="text-orange-500">
                           {highlight.icon}
                         </div>
@@ -205,7 +208,7 @@ const QinghaiTravel = () => {
                       <div className="flex-1">
                         <div className="text-orange-500 text-lg mb-1">{highlight.time}</div>
                         <h3 className="text-2xl md:text-3xl font-bold mb-3">{highlight.activity}</h3>
-                        <p className="text-gray-400 max-w-2xl">
+                        <p className={`max-w-2xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                         </p>
                       </div>
@@ -228,7 +231,7 @@ const QinghaiTravel = () => {
       </div>
 
       {/* Summary Section */}
-      <section className="min-h-screen py-20 px-4 md:px-20 bg-gradient-to-b from-black to-gray-900 flex flex-col justify-center">
+      <section className={`min-h-screen py-20 px-4 md:px-20 bg-gradient-to-b flex flex-col justify-center ${isDark ? 'from-black to-gray-900' : 'from-gray-50 to-gray-100'}`}>
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -240,7 +243,7 @@ const QinghaiTravel = () => {
             <h2 className="text-5xl md:text-7xl font-bold mb-6">
               <span className="text-orange-500">7</span> DAYS · <span className="text-orange-500">5</span> DESTINATIONS
             </h2>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+            <p className={`text-xl md:text-2xl max-w-3xl mx-auto ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
               Experience the breathtaking landscapes and rich culture of Qinghai in this carefully curated 7-day itinerary.
             </p>
           </motion.div>
@@ -257,14 +260,14 @@ const QinghaiTravel = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="bg-gray-900 rounded-2xl p-8 text-center"
+                className={`rounded-2xl p-8 text-center ${isDark ? 'bg-gray-900' : 'bg-white border border-gray-200'}`}
               >
-                <div className="w-20 h-20 mx-auto rounded-full bg-gray-800 flex items-center justify-center text-orange-500 mb-6">
+                <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center text-orange-500 mb-6 ${isDark ? 'bg-gray-800' : 'bg-gray-100'}`}>
                   {item.icon}
                 </div>
                 <h3 className="text-2xl font-bold mb-2">{item.title}</h3>
                 <div className="text-5xl font-bold text-orange-500 mb-2">{item.value}</div>
-                <p className="text-gray-400">{item.desc}</p>
+                <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -272,24 +275,24 @@ const QinghaiTravel = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 md:px-20 bg-black border-t border-gray-800">
+      <footer className={`py-12 px-4 md:px-20 border-t ${isDark ? 'bg-black border-gray-800' : 'bg-white border-gray-200'}`}>
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
               <h3 className="text-2xl font-bold mb-2">青海7日游</h3>
-              <p className="text-gray-400">May 2025 Travel Itinerary</p>
+              <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>May 2025 Travel Itinerary</p>
             </div>
 
             <div className="flex space-x-6 mb-6 md:mb-0">
-              <a href="https://x.com/Jone12suny" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-orange-500 transition-colors">
+              <a href="https://x.com/Jone12suny" target="_blank" rel="noopener noreferrer" className={isDark ? 'text-gray-400 hover:text-orange-500' : 'text-gray-600 hover:text-orange-500'} className="transition-colors">
                 <span className="text-sm">Twitter/X</span>
               </a>
-              <a href="https://github.com/linRichie" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-orange-500 transition-colors">
+              <a href="https://github.com/linRichie" target="_blank" rel="noopener noreferrer" className={isDark ? 'text-gray-400 hover:text-orange-500' : 'text-gray-600 hover:text-orange-500'} className="transition-colors">
                 <span className="text-sm">GitHub</span>
               </a>
             </div>
 
-            <div className="text-gray-500 text-sm">
+            <div className={`${isDark ? 'text-gray-500' : 'text-gray-600'} text-sm`}>
               <p>© 2025 Wang L. Richie. All rights reserved.</p>
               <p className="mt-1">Created by <a href="#" className="text-orange-500 hover:underline">Wang L. Richie</a></p>
             </div>

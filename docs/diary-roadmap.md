@@ -69,29 +69,31 @@ src/app/diary/
 
 #### 1. 旅拍图集增强
 
-- [ ] 图片灯箱查看器（放大/左右切换）
-- [ ] 按年份/地点/标签筛选
-- [ ] 图片懒加载优化
-- [ ] 图片 EXIF 信息显示（拍摄时间、地点）
+- [x] 图片灯箱查看器（放大/左右切换）
+- [x] 按年份/地点/标签筛选
+- [x] 图片懒加载优化
+- [x] 图片 EXIF 信息显示（拍摄参数）
 
 #### 2. 旅行博客完善
 
-- [ ] 博客详情页路由 (`/diary/blog/:id`)
-- [ ] Markdown 内容支持
-- [ ] 博客目录/标签云
-- [ ] 相关文章推荐
+- [x] 博客详情页路由 (`/diary/blog/:id`)
+- [x] Markdown 内容支持
+- [x] 博客目录/标签云
+- [x] 相关文章推荐
 
 #### 3. 旅行统计可视化
 
-- [ ] 世界地图标记已访问国家
-- [ ] 图表展示：年度旅行次数、洲分布
-- [ ] 照片数量趋势图
+- [x] 世界地图标记已访问国家
+- [x] 图表展示：年度旅行次数、洲分布
+- [x] 照片数量趋势图
 
 #### 4. 旅行规划器
 
-- [ ] 连接旅游指南模块数据
-- [ ] 生成计划后跳转到对应省份详情页
-- [ ] 计划保存/收藏功能（localStorage）
+- [x] 连接旅游指南模块数据
+- [x] 生成计划后跳转到对应省份详情页
+- [x] 计划保存/收藏功能（localStorage）
+
+**✅ 阶段二已完成** - 2025-01-13
 
 ---
 
@@ -125,6 +127,31 @@ src/app/diary/
 ---
 
 ## 更新日志
+
+- 2025-01-13: **问题修复** - Bug 修复与存储功能增强
+  - **问题修复**：
+    - 修复图片灯箱的关闭/上一张/下一张按钮显示异常（添加 Font Awesome CDN）
+    - 修复首页圆形图标显示异常（添加 Font Awesome CDN）
+    - 修复关于我页面社交链接图标显示异常（添加 Font Awesome CDN）
+  - **存储功能增强**：
+    - 新增 `src/app/diary/utils/storageConfig.js` - 存储配置文件，支持多种存储方式切换
+    - 新增 `src/app/diary/utils/sqliteAdapter.js` - SQLite 存储适配器（使用 sql.js 在浏览器中运行）
+    - 重构 `src/app/diary/utils/storage.js` - 统一存储接口，支持 localStorage（默认）、SQLite、MySQL、PostgreSQL
+    - 旅行规划器新增存储设置面板，可在 UI 中切换存储方式
+    - 支持配置文件可选启用 MySQL/PostgreSQL（需配置后端 API）
+    - SQLite 支持自动持久化到 IndexedDB
+  - **配置说明**：
+    - 默认使用 localStorage（无需配置）
+    - 启用 SQLite：在 `storageConfig.js` 中设置 `sqlite.enabled: true`
+    - 启用 MySQL/PostgreSQL：在 `storageConfig.js` 中配置 `apiUrl` 并设置 `enabled: true`
+
+- 2025-01-13: **阶段二完成** - 功能增强
+  - 新增组件：`TagCloud`（标签云）、`BlogTOC`（目录导航）、`RelatedPosts`（相关文章推荐）、`PhotoLightbox`（灯箱查看器）、`WorldMap`（世界地图）
+  - 旅拍图集增强：灯箱支持 EXIF 信息显示（相机、镜头、光圈、快门、ISO、焦距）
+  - 旅行博客增强：详情页支持侧边栏目录导航和相关文章推荐，列表页支持标签筛选
+  - 旅行统计增强：新增照片数量趋势图（折线图可视化）
+  - 旅行规划器增强：支持计划保存/收藏/删除/加载功能（localStorage 持久化）
+  - 新增工具文件 `src/app/diary/utils/storage.js`
 
 - 2025-01-13: **阶段一完成** - 模块拆分与组件化
   - 创建目录结构 `src/app/diary/{pages,data,components}`

@@ -54,3 +54,13 @@ export const continentData = [
   { continent: '北美洲', count: 2, color: '#10b981' },
   { continent: '大洋洲', count: 1, color: '#f59e0b' }
 ];
+
+// 照片数量趋势数据
+export const photoTrendData = [
+  { year: '2019', count: 120 },
+  { year: '2020', count: 45 },
+  { year: '2021', count: 89 },
+  { year: '2022', count: 234 },
+  { year: '2023', count: 312 },
+  { year: '2024', count: 256 }
+];

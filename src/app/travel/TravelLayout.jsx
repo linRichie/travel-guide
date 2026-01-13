@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import { useTheme } from '../../contexts/ThemeContext';
 
 /**
  * 旅游模块布局组件
@@ -7,6 +8,8 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
  */
 const TravelLayout = () => {
   const location = useLocation();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const isTravelHome = location.pathname === '/travel' || location.pathname === '/travel/';
 
   // 省份导航配置
@@ -27,24 +30,35 @@ const TravelLayout = () => {
   return (
     <div className="flex flex-col flex-1">
       {/* 省份导航 */}
-      <nav className="w-full bg-black/50 backdrop-blur-sm border-b border-white/10">
+      <nav className={`w-full backdrop-blur-sm border-b transition-colors duration-300 ${
+        isDark
+          ? 'bg-black/50 border-white/10'
+          : 'bg-white/70 border-gray-200'
+      }`}>
         <div className="container mx-auto px-6">
           <div className="flex space-x-1 overflow-x-auto py-3 scrollbar-hide">
-            {provinces.map((province) => (
-              <Link
-                key={province.path}
-                to={province.path}
-                className={`whitespace-nowrap px-4 py-2 rounded-full transition-all duration-300 flex items-center ${
-                  location.pathname === province.path ||
-                  (province.path !== '/travel' && location.pathname.startsWith(province.path))
-                    ? 'bg-white/10 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <i className={`fas ${province.icon} mr-2 text-sm`}></i>
-                {province.name}
-              </Link>
-            ))}
+            {provinces.map((province) => {
+              const isActive = location.pathname === province.path ||
+                (province.path !== '/travel' && location.pathname.startsWith(province.path));
+              return (
+                <Link
+                  key={province.path}
+                  to={province.path}
+                  className={`whitespace-nowrap px-4 py-2 rounded-full transition-all duration-300 flex items-center ${
+                    isActive
+                      ? isDark
+                        ? 'bg-white/10 text-white'
+                        : 'bg-orange-500 text-white'
+                      : isDark
+                      ? 'text-gray-400 hover:text-white hover:bg-white/5'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                  }`}
+                >
+                  <i className={`fas ${province.icon} mr-2 text-sm`}></i>
+                  {province.name}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </nav>
