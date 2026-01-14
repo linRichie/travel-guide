@@ -105,11 +105,6 @@ const TravelPlans = () => {
     }
   };
 
-  // 加载计划到表单
-  const handleLoad = (plan) => {
-    navigate('/diary/planner', { state: { loadPlan: plan } });
-  };
-
   // 编辑计划
   const handleEdit = (plan) => {
     navigate('/diary/planner', { state: { editPlan: plan } });
@@ -342,7 +337,6 @@ const TravelPlans = () => {
                 >
                   <PlanCard
                     plan={plan}
-                    onLoad={handleLoad}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                   />

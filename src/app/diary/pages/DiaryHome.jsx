@@ -29,14 +29,6 @@ const DiaryHome = () => {
       to: '/diary/gallery'
     },
     {
-      id: 'planner',
-      title: '旅行规划',
-      description: 'AI 智能生成行程',
-      icon: 'fa-map-marked-alt',
-      color: 'from-green-500 to-emerald-600',
-      to: '/diary/planner'
-    },
-    {
       id: 'plans',
       title: '旅行规划库',
       description: '查看和管理计划',

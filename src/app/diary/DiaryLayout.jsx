@@ -16,7 +16,7 @@ const DiaryLayout = () => {
     { id: 'home', label: '首页', path: '/diary', icon: 'fa-home' },
     { id: 'about', label: '关于我', path: '/diary/about', icon: 'fa-user' },
     { id: 'gallery', label: '旅拍图集', path: '/diary/gallery', icon: 'fa-images' },
-    { id: 'planner', label: '旅行规划', path: '/diary/planner', icon: 'fa-map-marked-alt' },
+    { id: 'plans', label: '旅行规划库', path: '/diary/plans', icon: 'fa-suitcase' },
     { id: 'stats', label: '旅行统计', path: '/diary/stats', icon: 'fa-chart-bar' },
     { id: 'blog', label: '旅行博客', path: '/diary/blog', icon: 'fa-blog' }
   ];

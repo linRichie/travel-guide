@@ -30,7 +30,6 @@ const Planner = () => {
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const [savedPlans, setSavedPlans] = useState([]);
-  const [showSavedPlans, setShowSavedPlans] = useState(false);
   const [showStorageSettings, setShowStorageSettings] = useState(false);
   const [notification, setNotification] = useState(null);
   const [storageInfo, setStorageInfo] = useState(getStorageInfo());
@@ -66,18 +65,7 @@ const Planner = () => {
   // 处理从 TravelPlans 页面传入的计划数据
   useEffect(() => {
     if (location.state) {
-      if (location.state.loadPlan) {
-        // 加载计划到表单（用于查看）
-        const plan = location.state.loadPlan;
-        setFormData({
-          destination: plan.destination || '',
-          startDate: plan.startDate || '',
-          days: plan.days?.toString() || '',
-          budget: plan.budget || 'comfortable'
-        });
-        setEditingPlanId(null); // 加载模式不设置编辑ID
-        showNotification('已加载计划: ' + plan.destination, 'info');
-      } else if (location.state.editPlan) {
+      if (location.state.editPlan) {
         // 加载计划到表单（用于编辑）
         const plan = location.state.editPlan;
         setFormData({
@@ -162,30 +150,14 @@ const Planner = () => {
 
     try {
       await saveTravelPlan(planData);
-      await loadSavedPlans();
       showNotification(editingPlanId ? '计划已更新！' : '计划已保存！');
-      setShowSavedPlans(true);
       setEditingPlanId(null); // 清除编辑状态
+      // 保存后跳转到旅行规划库页面
+      navigate('/diary/plans');
     } catch (error) {
       console.error('保存计划失败:', error);
       showNotification('保存失败: ' + (error.message || '未知错误'), 'error');
     }
-  };
-
-  const handleDeletePlan = async (id) => {
-    await deleteTravelPlan(id);
-    await loadSavedPlans();
-    showNotification('计划已删除', 'info');
-  };
-
-  const handleLoadPlan = (plan) => {
-    setFormData({
-      destination: plan.destination,
-      startDate: plan.startDate,
-      days: plan.days,
-      budget: plan.budget
-    });
-    setShowSavedPlans(false);
   };
 
   const handleSubmit = async (e) => {
@@ -274,79 +246,6 @@ const Planner = () => {
                 'fa-check-circle'
               } mr-2`}></i>
               {notification.message}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* 已保存的计划面板 */}
-        <AnimatePresence>
-          {showSavedPlans && (
-            <motion.div
-              className="fixed inset-0 z-40 bg-black/80 flex items-center justify-center p-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowSavedPlans(false)}
-            >
-              <motion.div
-                className={`${isDark ? 'bg-gray-900 border-white/10' : 'bg-white border-gray-200'} border rounded-2xl p-6 w-full max-w-lg max-h-[80vh] overflow-hidden transition-colors duration-300`}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className={`text-xl font-bold transition-colors duration-300 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    <i className="fas fa-bookmark mr-2 text-purple-400"></i>
-                    已保存的计划
-                  </h3>
-                  <button
-                    onClick={() => setShowSavedPlans(false)}
-                    className={`transition-colors duration-300 ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
-                  >
-                    <i className="fas fa-times"></i>
-                  </button>
-                </div>
-
-                <div className="space-y-3 overflow-y-auto max-h-[60vh]">
-                  {savedPlans.length > 0 ? (
-                    savedPlans.map(plan => (
-                      <div
-                        key={plan.id}
-                        className={`${isDark ? 'bg-gray-800/50' : 'bg-gray-100'} rounded-xl p-4 flex items-center justify-between transition-colors duration-300`}
-                      >
-                        <div className="flex-1">
-                          <div className={`font-medium transition-colors duration-300 ${isDark ? 'text-white' : 'text-gray-900'}`}>{plan.destination}</div>
-                          <div className={`text-sm transition-colors duration-300 ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>
-                            {plan.startDate} · {plan.days}天 · {getBudgetLabel(plan.budget)}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleLoadPlan(plan)}
-                            className="p-2 text-purple-400 hover:bg-purple-500/20 rounded-lg transition-colors"
-                            title="加载此计划"
-                          >
-                            <i className="fas fa-redo"></i>
-                          </button>
-                          <button
-                            onClick={() => handleDeletePlan(plan.id)}
-                            className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors"
-                            title="删除此计划"
-                          >
-                            <i className="fas fa-trash"></i>
-                          </button>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8 text-gray-500">
-                      <i className="fas fa-folder-open text-4xl mb-3"></i>
-                      <p>还没有保存的计划</p>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -487,20 +386,6 @@ const Planner = () => {
                 )}
               </motion.button>
             </div>
-
-            {/* 查看已保存计划 */}
-            {savedPlans.length > 0 && (
-              <motion.button
-                type="button"
-                onClick={() => setShowSavedPlans(true)}
-                className="w-full text-center text-gray-500 hover:text-purple-400 transition-colors text-sm"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <i className="fas fa-folder-open mr-1"></i>
-                查看已保存的计划 ({savedPlans.length})
-              </motion.button>
-            )}
           </form>
 
           {/* 提示信息 */}
