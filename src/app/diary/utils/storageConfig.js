@@ -1,15 +1,16 @@
 /**
  * 旅行规划器存储配置
- * 支持多种存储方式：SQLite（默认）、MySQL、PostgreSQL
+ * 支持多种存储方式：本地 SQLite API（推荐）、sql.js（浏览器端）
  */
 
 /**
  * 存储类型枚举
  */
 export const StorageType = {
-  SQLITE: 'sqlite',                 // SQLite WebAssembly（sql.js）
-  MYSQL: 'mysql',                   // MySQL（需要后端服务）
-  POSTGRESQL: 'postgresql'          // PostgreSQL（需要后端服务）
+  LOCAL_SQLITE: 'local_sqlite',       // 本地 SQLite API（通过 Node.js 后端，推荐）
+  SQLITE: 'sqlite',                   // SQLite WebAssembly（sql.js，浏览器端）
+  MYSQL: 'mysql',                     // MySQL（需要后端服务）
+  POSTGRESQL: 'postgresql'            // PostgreSQL（需要后端服务）
 };
 
 /**
@@ -17,28 +18,35 @@ export const StorageType = {
  * 修改此文件以切换存储方式
  */
 export const storageConfig = {
-  // 当前使用的存储类型（默认 SQLite）
-  type: StorageType.SQLITE,
+  // 当前使用的存储类型（默认本地 SQLite API）
+  type: StorageType.LOCAL_SQLITE,
 
-  // SQLite 配置（使用 sql.js，浏览器端运行）
+  // 本地 SQLite API 配置（推荐，数据持久化到本地文件）
+  localSqlite: {
+    enabled: true,
+    apiUrl: 'http://localhost:3001/api',
+    description: '本地 SQLite 文件，数据持久化可靠'
+  },
+
+  // sql.js 配置（浏览器端，存储到 IndexedDB）
   sqlite: {
-    enabled: true,                   // 是否启用 SQLite
-    dbName: 'travel_plans.db',       // 数据库文件名
-    autoSave: true                   // 是否自动保存到 IndexedDB
+    enabled: false,
+    dbName: 'travel_plans.db',
+    autoSave: true
   },
 
   // MySQL 配置（需要后端 API）
   mysql: {
-    enabled: false,                  // 是否启用 MySQL
-    apiUrl: '/api/mysql',            // 后端 API 地址
-    tableName: 'travel_plans'        // 表名
+    enabled: false,
+    apiUrl: '/api/mysql',
+    description: '需要配置后端 API'
   },
 
   // PostgreSQL 配置（需要后端 API）
   postgresql: {
-    enabled: false,                  // 是否启用 PostgreSQL
-    apiUrl: '/api/postgres',         // 后端 API 地址
-    tableName: 'travel_plans'        // 表名
+    enabled: false,
+    apiUrl: '/api/postgres',
+    description: '需要配置后端 API'
   }
 };
 
@@ -51,7 +59,6 @@ export const getCurrentStorageType = () => {
 
 /**
  * 设置存储类型
- * 注意：SQLite 需要先加载 sql.js 库，MySQL/PgSQL 需要配置后端 API
  */
 export const setStorageType = (type) => {
   if (Object.values(StorageType).includes(type)) {
@@ -64,46 +71,28 @@ export const setStorageType = (type) => {
 
 /**
  * 检查存储是否需要异步操作
- * SQLite/MySQL/PostgreSQL 都是异步存储
  */
 export const isAsyncStorage = () => {
   const type = storageConfig.type;
-  return type === StorageType.SQLITE ||
+  return type === StorageType.LOCAL_SQLITE ||
+         type === StorageType.SQLITE ||
          type === StorageType.MYSQL ||
          type === StorageType.POSTGRESQL;
 };
 
 /**
- * 初始化存储（用于 SQLite/MySQL/PostgreSQL）
+ * 获取存储信息
  */
-export const initializeStorage = async () => {
+export const getStorageInfo = () => {
   const type = storageConfig.type;
 
-  switch (type) {
-    case StorageType.SQLITE:
-      if (!storageConfig.sqlite.enabled) {
-        console.warn('SQLite 未启用，请在 storageConfig.js 中配置');
-        return false;
-      }
-      // 动态加载 sql.js（npm 包已安装）
-      try {
-        const initSqlJs = await import('sql.js');
-        const SQL = await initSqlJs.default({
-          // 使用本地 wasm 文件（由 sql.js npm 包提供）
-          locateFile: file => `/node_modules/sql.js/dist/${file}`
-        });
-        return SQL;
-      } catch (error) {
-        console.error('加载 sql.js 失败:', error);
-        return null;
-      }
-
-    case StorageType.MYSQL:
-    case StorageType.POSTGRESQL:
-      console.warn(`${type} 需要配置后端 API 服务`);
-      return null;
-
-    default:
-      return null;
-  }
+  return {
+    currentType: type,
+    config: {
+      localSqlite: storageConfig.localSqlite,
+      sqlite: storageConfig.sqlite,
+      mysql: storageConfig.mysql,
+      postgresql: storageConfig.postgresql
+    }
+  };
 };

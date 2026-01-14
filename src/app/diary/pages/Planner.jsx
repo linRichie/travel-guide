@@ -115,10 +115,26 @@ const Planner = () => {
       return;
     }
 
-    await saveTravelPlan(formData);
-    await loadSavedPlans();
-    showNotification('计划已保存！');
-    setShowSavedPlans(true);
+    // 构造完整的计划对象，包含必需的 id 字段
+    const planData = {
+      id: `plan_${Date.now()}`, // 生成唯一 ID
+      destination: formData.destination,
+      startDate: formData.startDate,
+      days: parseInt(formData.days),
+      budget: formData.budget || 'comfortable',
+      itinerary: null, // 可以后续扩展存储生成的行程
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await saveTravelPlan(planData);
+      await loadSavedPlans();
+      showNotification('计划已保存！');
+      setShowSavedPlans(true);
+    } catch (error) {
+      console.error('保存计划失败:', error);
+      showNotification('保存失败: ' + (error.message || '未知错误'), 'error');
+    }
   };
 
   const handleDeletePlan = async (id) => {
@@ -141,9 +157,26 @@ const Planner = () => {
     e.preventDefault();
     setIsGenerating(true);
 
-    // 保存当前计划
-    await saveTravelPlan(formData);
-    await loadSavedPlans();
+    // 保存当前计划（构造完整对象）
+    const planData = {
+      id: `plan_${Date.now()}`,
+      destination: formData.destination,
+      startDate: formData.startDate,
+      days: parseInt(formData.days),
+      budget: formData.budget || 'comfortable',
+      itinerary: null,
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await saveTravelPlan(planData);
+      await loadSavedPlans();
+    } catch (error) {
+      console.error('保存计划失败:', error);
+      showNotification('保存失败: ' + (error.message || '未知错误'), 'error');
+      setIsGenerating(false);
+      return;
+    }
 
     // 模拟 AI 生成过程
     setTimeout(() => {

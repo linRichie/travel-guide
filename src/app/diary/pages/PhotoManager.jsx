@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../../contexts/ThemeContext';
 import PhotoUpload from '../components/PhotoUpload';
-import { galleryItems } from '../data/galleryData';
 import {
   savePhotos,
   getPhotos,
@@ -23,24 +22,19 @@ import { StorageType } from '../utils/storageConfig';
  * 图片管理页面
  * 支持上传、编辑、删除、批量管理照片
  * 使用统一存储接口：SQLite（默认）/MySQL/PostgreSQL
+ * 所有图片数据均来自数据库，无内置图片数据
  */
 const PhotoManager = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const navigate = useNavigate();
 
-  // 从存储加载自定义图片
-  const [customPhotos, setCustomPhotos] = useState([]);
+  // 从数据库加载的图片
+  const [photos, setPhotos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // 合并所有图片（默认 + 自定义）
-  const [allPhotos, setAllPhotos] = useState([...galleryItems]);
 
   // 视图模式
   const [viewMode, setViewMode] = useState('grid'); // grid | list
-
-  // 筛选状态
-  const [filter, setFilter] = useState('all'); // all | default | custom
 
   // 搜索状态
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,26 +60,30 @@ const PhotoManager = () => {
   // 文件输入引用
   const fileInputRef = useRef(null);
 
-  // 加载自定义图片
-  useEffect(() => {
-    loadCustomPhotos();
+  // 显示通知
+  const showNotification = useCallback((message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
   }, []);
 
-  // 监听存储类型变化重新加载
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setStorageInfo(getStorageInfo());
-      loadCustomPhotos();
-      loadDbStats();
-    };
-
-    window.addEventListener('storageTypeChanged', handleStorageChange);
-    return () => window.removeEventListener('storageTypeChanged', handleStorageChange);
-  }, []);
+  // 从数据库加载图片
+  const loadPhotos = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await getPhotos();
+      console.log('loadPhotos: 从数据库加载', data.length, '张图片');
+      setPhotos(data);
+    } catch (error) {
+      console.error('加载图片失败:', error);
+      showNotification('加载图片失败', 'error');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [showNotification]);
 
   // 加载数据库统计
-  const loadDbStats = async () => {
-    if (storageInfo.currentType === 'sqlite') {
+  const loadDbStats = useCallback(async () => {
+    if (storageInfo.currentType === 'local_sqlite' || storageInfo.currentType === 'sqlite') {
       try {
         const stats = await getDatabaseStats();
         setDbStats(stats);
@@ -93,37 +91,31 @@ const PhotoManager = () => {
         console.error('获取数据库统计失败:', error);
       }
     }
-  };
+  }, [storageInfo.currentType]);
 
-  // 初始加载统计
+  // 初始加载
   useEffect(() => {
+    loadPhotos();
     loadDbStats();
-  }, []);
+  }, [loadPhotos, loadDbStats]);
 
-  const loadCustomPhotos = async () => {
-    setIsLoading(true);
-    try {
-      const photos = await getPhotos();
-      setCustomPhotos(photos);
-      setAllPhotos([...galleryItems, ...photos]);
-    } catch (error) {
-      console.error('加载图片失败:', error);
-      showNotification('加载图片失败', 'error');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // 监听存储类型变化重新加载
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setStorageInfo(getStorageInfo());
+      loadPhotos();
+      loadDbStats();
+    };
 
-  const showNotification = (message, type = 'success') => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
-  };
+    window.addEventListener('storageTypeChanged', handleStorageChange);
+    return () => window.removeEventListener('storageTypeChanged', handleStorageChange);
+  }, [loadPhotos, loadDbStats]);
 
   // 处理上传完成
   const handleUploadComplete = async (uploadedPhotos) => {
     try {
-      const savedPhotos = await savePhotos(uploadedPhotos);
-      await loadCustomPhotos();
+      await savePhotos(uploadedPhotos);
+      await loadPhotos();
       await loadDbStats();
       showNotification(`成功上传 ${uploadedPhotos.length} 张图片`);
     } catch (error) {
@@ -154,7 +146,7 @@ const PhotoManager = () => {
     try {
       const result = await importDatabaseFile(file);
       if (result.success) {
-        await loadCustomPhotos();
+        await loadPhotos();
         await loadDbStats();
         showNotification('数据库导入成功，请刷新页面');
       } else {
@@ -168,12 +160,12 @@ const PhotoManager = () => {
 
   // 清空数据
   const handleClearData = async () => {
-    if (!confirm('确定要清空所有自定义数据吗？此操作不可恢复！')) return;
+    if (!confirm('确定要清空所有图片吗？此操作不可恢复！')) return;
 
     try {
       const result = await clearAllCustomData();
       if (result.success) {
-        await loadCustomPhotos();
+        await loadPhotos();
         await loadDbStats();
         showNotification('数据已清空');
       } else {
@@ -191,7 +183,7 @@ const PhotoManager = () => {
 
     try {
       await deletePhotoStorage(id);
-      await loadCustomPhotos();
+      await loadPhotos();
       await loadDbStats();
       showNotification('图片已删除');
       if (editModal?.id === id) {
@@ -209,7 +201,7 @@ const PhotoManager = () => {
 
     try {
       await deletePhotosStorage(selectedIds);
-      await loadCustomPhotos();
+      await loadPhotos();
       await loadDbStats();
       setSelectedIds(new Set());
       setSelectionMode(false);
@@ -232,7 +224,7 @@ const PhotoManager = () => {
 
     try {
       await updatePhoto(editingPhoto);
-      await loadCustomPhotos();
+      await loadPhotos();
       setEditModal(null);
       setEditingPhoto(null);
       showNotification('图片信息已更新');
@@ -255,16 +247,14 @@ const PhotoManager = () => {
 
   // 全选/取消全选
   const toggleSelectAll = () => {
-    const customIds = filteredPhotos
-      .filter(p => p.isCustom)
-      .map(p => p.id);
+    const allIds = photos.map(p => p.id);
 
-    if (customIds.every(id => selectedIds.has(id))) {
+    if (allIds.every(id => selectedIds.has(id))) {
       // 取消全选
       setSelectedIds(new Set());
     } else {
       // 全选
-      setSelectedIds(new Set(customIds));
+      setSelectedIds(new Set(allIds));
     }
   };
 
@@ -282,57 +272,51 @@ const PhotoManager = () => {
   // 存储方式选项
   const storageOptions = [
     {
+      value: StorageType.LOCAL_SQLITE,
+      label: '本地 SQLite',
+      desc: '本地文件 SQLite（推荐）',
+      icon: 'fa-hdd',
+      enabled: storageInfo.config.localSqlite.enabled
+    },
+    {
       value: StorageType.SQLITE,
       label: 'SQLite',
       desc: '浏览器端 SQLite 数据库',
       icon: 'fa-database',
-      enabled: storageInfo.config.sqlite
+      enabled: storageInfo.config.sqlite.enabled
     },
     {
       value: StorageType.MYSQL,
       label: 'MySQL',
       desc: '需要配置后端 API',
       icon: 'fa-server',
-      enabled: storageInfo.config.mysql
+      enabled: storageInfo.config.mysql.enabled
     },
     {
       value: StorageType.POSTGRESQL,
       label: 'PostgreSQL',
       desc: '需要配置后端 API',
       icon: 'fa-server',
-      enabled: storageInfo.config.postgresql
+      enabled: storageInfo.config.postgresql.enabled
     }
   ];
 
-  // 过滤后的照片
-  const filteredPhotos = allPhotos
-    .filter(photo => {
-      // 类型筛选
-      if (filter === 'default' && photo.isCustom) return false;
-      if (filter === 'custom' && !photo.isCustom) return false;
-
-      // 搜索筛选
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        return (
-          photo.title?.toLowerCase().includes(query) ||
-          photo.location?.toLowerCase().includes(query) ||
-          photo.tags?.some(tag => tag.toLowerCase().includes(query))
-        );
-      }
-
-      return true;
-    })
-    .map(photo => ({
-      ...photo,
-      isCustom: customPhotos.some(p => p.id === photo.id)
-    }));
+  // 搜索过滤后的照片
+  const filteredPhotos = photos.filter(photo => {
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      return (
+        photo.title?.toLowerCase().includes(query) ||
+        photo.location?.toLowerCase().includes(query) ||
+        photo.tags?.some(tag => tag.toLowerCase().includes(query))
+      );
+    }
+    return true;
+  });
 
   // 统计
   const stats = {
-    total: allPhotos.length,
-    default: galleryItems.length,
-    custom: customPhotos.length
+    total: photos.length
   };
 
   return (
@@ -357,11 +341,12 @@ const PhotoManager = () => {
                   图片管理
                 </h1>
                 <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  共 {stats.total} 张图片 · {stats.custom} 张自定义
+                  共 {stats.total} 张图片
                   <span className={`ml-2 px-2 py-0.5 rounded text-xs ${
                     isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'
                   }`}>
-                    {storageInfo.currentType === 'sqlite' ? 'SQLite' :
+                    {storageInfo.currentType === 'local_sqlite' ? '本地 SQLite' :
+                     storageInfo.currentType === 'sqlite' ? 'SQLite' :
                      storageInfo.currentType === 'mysql' ? 'MySQL' :
                      storageInfo.currentType === 'postgresql' ? 'PostgreSQL' : '本地存储'}
                   </span>
@@ -439,7 +424,7 @@ const PhotoManager = () => {
                   <i className="fas fa-database text-purple-400"></i>
                   <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>存储方式</span>
                 </div>
-                {dbStats && storageInfo.currentType === 'sqlite' && (
+                {dbStats && (storageInfo.currentType === 'local_sqlite' || storageInfo.currentType === 'sqlite') && (
                   <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                     {dbStats.photos} 张图片 · {dbStats.sizeKB} KB
                   </span>
@@ -468,7 +453,7 @@ const PhotoManager = () => {
               </div>
 
               {/* SQLite 专属操作 */}
-              {storageInfo.currentType === 'sqlite' && (
+              {(storageInfo.currentType === 'local_sqlite' || storageInfo.currentType === 'sqlite') && (
                 <div className={`pt-4 border-t ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
                   <p className={`text-sm mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                     数据库操作
@@ -542,46 +527,6 @@ const PhotoManager = () => {
                   isDark ? 'text-white placeholder-gray-500' : 'text-gray-900 placeholder-gray-400'
                 }`}
               />
-            </div>
-
-            {/* 筛选 */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setFilter('all')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  filter === 'all'
-                    ? 'bg-purple-500 text-white'
-                    : isDark
-                      ? 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                }`}
-              >
-                全部 ({stats.total})
-              </button>
-              <button
-                onClick={() => setFilter('default')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  filter === 'default'
-                    ? 'bg-purple-500 text-white'
-                    : isDark
-                      ? 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                }`}
-              >
-                默认 ({stats.default})
-              </button>
-              <button
-                onClick={() => setFilter('custom')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  filter === 'custom'
-                    ? 'bg-purple-500 text-white'
-                    : isDark
-                      ? 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
-                }`}
-              >
-                自定义 ({stats.custom})
-              </button>
             </div>
           </div>
         </div>
@@ -709,20 +654,18 @@ const PhotoManager = () => {
                         >
                           <i className="fas fa-eye"></i>
                         </Link>
-                        {photo.isCustom && (
-                          <button
-                            onClick={() => deletePhotoHandler(photo.id)}
-                            className="w-10 h-10 rounded-full bg-red-500/80 hover:bg-red-600 text-white flex items-center justify-center transition-colors"
-                            title="删除"
-                          >
-                            <i className="fas fa-trash"></i>
-                          </button>
-                        )}
+                        <button
+                          onClick={() => deletePhotoHandler(photo.id)}
+                          className="w-10 h-10 rounded-full bg-red-500/80 hover:bg-red-600 text-white flex items-center justify-center transition-colors"
+                          title="删除"
+                        >
+                          <i className="fas fa-trash"></i>
+                        </button>
                       </div>
                     </div>
 
                     {/* 选择模式 */}
-                    {selectionMode && photo.isCustom && (
+                    {selectionMode && (
                       <div className="absolute top-2 left-2">
                         <button
                           onClick={() => toggleSelect(photo.id)}
@@ -734,15 +677,6 @@ const PhotoManager = () => {
                         >
                           {selectedIds.has(photo.id) && <i className="fas fa-check text-sm"></i>}
                         </button>
-                      </div>
-                    )}
-
-                    {/* 自定义标记 */}
-                    {photo.isCustom && (
-                      <div className="absolute top-2 right-2">
-                        <span className="px-2 py-1 bg-purple-500 text-white text-xs rounded-full">
-                          自定义
-                        </span>
                       </div>
                     )}
                   </div>
@@ -770,7 +704,7 @@ const PhotoManager = () => {
                   }`}
                 >
                   {/* 选择框 */}
-                  {selectionMode && photo.isCustom && (
+                  {selectionMode && (
                     <button
                       onClick={() => toggleSelect(photo.id)}
                       className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
@@ -796,11 +730,6 @@ const PhotoManager = () => {
                   <div className="flex-1 min-w-0">
                     <h3 className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                       {photo.title}
-                      {photo.isCustom && (
-                        <span className="ml-2 px-2 py-0.5 bg-purple-500/30 text-purple-300 text-xs rounded-full">
-                          自定义
-                        </span>
-                      )}
                     </h3>
                     <p className={`text-sm text-gray-500`}>
                       {photo.location} · {photo.date}
@@ -833,18 +762,16 @@ const PhotoManager = () => {
                     >
                       <i className="fas fa-edit"></i>
                     </button>
-                    {photo.isCustom && (
-                      <button
-                        onClick={() => deletePhotoHandler(photo.id)}
-                        className={`p-2 rounded-lg transition-colors ${
-                          isDark
-                            ? 'hover:bg-red-500/20 text-gray-400 hover:text-red-400'
-                            : 'hover:bg-red-50 text-gray-500 hover:text-red-500'
-                        }`}
-                      >
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    )}
+                    <button
+                      onClick={() => deletePhotoHandler(photo.id)}
+                      className={`p-2 rounded-lg transition-colors ${
+                        isDark
+                          ? 'hover:bg-red-500/20 text-gray-400 hover:text-red-400'
+                          : 'hover:bg-red-50 text-gray-500 hover:text-red-500'
+                      }`}
+                    >
+                      <i className="fas fa-trash"></i>
+                    </button>
                   </div>
                 </div>
               ))}

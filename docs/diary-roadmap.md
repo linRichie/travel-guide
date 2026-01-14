@@ -136,10 +136,15 @@ src/app/diary/
   - **图片上传与管理功能**：
     - 新增 `src/app/diary/components/PhotoUpload.jsx` - 图片上传组件，支持拖拽上传、多图选择、元数据编辑
     - 新增 `src/app/diary/pages/PhotoManager.jsx` - 图片管理页面，支持网格/列表视图、批量选择、编辑、删除
-    - 支持自定义图片持久化到 SQLite/MySQL/PostgreSQL（通过统一存储接口）
     - 支持编辑图片元数据（标题、地点、年份、标签）
-    - **存储优化**：图片管理使用与旅行规划相同的统一存储接口，默认使用 SQLite，可配置切换到 MySQL/PostgreSQL
+  - **本地 SQLite 后端（推荐存储方式）**：
+    - 新增 `server/index.js` - Express + better-sqlite3 后端服务器，运行在 `http://localhost:3001`
+    - 新增 `src/app/diary/utils/localStorageSQLite.js` - 本地 SQLite API 适配器
+    - 数据持久化到本地文件 `database/travel_photos.db`，刷新页面不丢失数据
+    - 支持存储方式切换：本地 SQLite（推荐）、sql.js（浏览器端）、MySQL、PostgreSQL
+    - 新增启动命令：`npm run server`（后端）、`npm run dev:all`（同时启动前后端）
   - **首页更新**：新增「全文搜索」和「图片管理」导航入口
+  - **Bug 修复**：修复图片上传后刷新页面丢失的问题（由浏览器端 sql.js 改为本地 SQLite 文件存储）
 
 - 2025-01-13: **问题修复** - Bug 修复与存储功能增强
   - **问题修复**：
