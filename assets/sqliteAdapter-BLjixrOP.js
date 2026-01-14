@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/sql-wasm-BvDhVnUR.js","assets/index-erUc0sB-.js","assets/index-DaAaFiGX.css"])))=>i.map(i=>d[i]);
-import{_ as T}from"./index-erUc0sB-.js";let s=null,d=null;const i=async()=>{if(s)return s;try{return d=await(await T(()=>import("./sql-wasm-BvDhVnUR.js").then(t=>t.s),__vite__mapDeps([0,1,2]))).default({locateFile:t=>`/node_modules/sql.js/dist/${t}`}),s=new d.Database,u(),await _(),s}catch(e){return console.error("SQLite 初始化失败:",e),null}},u=()=>{s.exec(`
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/sql-wasm-CIjaVDGG.js","assets/index-D64Y3SFB.js","assets/index-DaAaFiGX.css"])))=>i.map(i=>d[i]);
+import{_ as T}from"./index-D64Y3SFB.js";let s=null,d=null;const i=async()=>{if(s)return s;try{return d=await(await T(()=>import("./sql-wasm-CIjaVDGG.js").then(t=>t.s),__vite__mapDeps([0,1,2]))).default({locateFile:t=>`/node_modules/sql.js/dist/${t}`}),s=new d.Database,u(),await _(),s}catch(e){return console.error("SQLite 初始化失败:",e),null}},u=()=>{s.exec(`
     CREATE TABLE IF NOT EXISTS travel_plans (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       destination TEXT NOT NULL,
