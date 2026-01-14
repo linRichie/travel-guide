@@ -51,6 +51,22 @@ const DiaryHome = () => {
       icon: 'fa-blog',
       color: 'from-pink-500 to-rose-600',
       to: '/diary/blog'
+    },
+    {
+      id: 'search',
+      title: '全文搜索',
+      description: '搜索博客和图片',
+      icon: 'fa-search',
+      color: 'from-violet-500 to-purple-600',
+      to: '/diary/search'
+    },
+    {
+      id: 'photos',
+      title: '图片管理',
+      description: '上传和管理照片',
+      icon: 'fa-camera',
+      color: 'from-teal-500 to-emerald-600',
+      to: '/diary/photos'
     }
   ];
 
@@ -87,7 +103,7 @@ const DiaryHome = () => {
 
           {/* 导航卡片 */}
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}

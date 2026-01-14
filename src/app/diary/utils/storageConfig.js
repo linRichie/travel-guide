@@ -1,13 +1,12 @@
 /**
  * 旅行规划器存储配置
- * 支持多种存储方式：localStorage（默认）、SQLite、MySQL、PostgreSQL
+ * 支持多种存储方式：SQLite（默认）、MySQL、PostgreSQL
  */
 
 /**
  * 存储类型枚举
  */
 export const StorageType = {
-  LOCAL_STORAGE: 'localStorage',    // 浏览器本地存储（默认，无需配置）
   SQLITE: 'sqlite',                 // SQLite WebAssembly（sql.js）
   MYSQL: 'mysql',                   // MySQL（需要后端服务）
   POSTGRESQL: 'postgresql'          // PostgreSQL（需要后端服务）
@@ -18,7 +17,7 @@ export const StorageType = {
  * 修改此文件以切换存储方式
  */
 export const storageConfig = {
-  // 当前使用的存储类型
+  // 当前使用的存储类型（默认 SQLite）
   type: StorageType.SQLITE,
 
   // SQLite 配置（使用 sql.js，浏览器端运行）
@@ -65,7 +64,7 @@ export const setStorageType = (type) => {
 
 /**
  * 检查存储是否需要异步操作
- * SQLite/MySQL/PostgreSQL 需要异步，localStorage 不需要
+ * SQLite/MySQL/PostgreSQL 都是异步存储
  */
 export const isAsyncStorage = () => {
   const type = storageConfig.type;

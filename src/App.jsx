@@ -28,6 +28,8 @@ import Planner from './app/diary/pages/Planner';
 import Stats from './app/diary/pages/Stats';
 import BlogList from './app/diary/pages/BlogList';
 import BlogPost from './app/diary/pages/BlogPost';
+import SearchResults from './app/diary/pages/SearchResults';
+import PhotoManager from './app/diary/pages/PhotoManager';
 
 /**
  * 主应用组件 - 路由配置
@@ -68,6 +70,8 @@ function App() {
           <Route path="stats" element={<Stats />} />
           <Route path="blog" element={<BlogList />} />
           <Route path="blog/:id" element={<BlogPost />} />
+          <Route path="search" element={<SearchResults />} />
+          <Route path="photos" element={<PhotoManager />} />
         </Route>
       </Route>
     </Routes>

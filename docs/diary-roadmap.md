@@ -99,8 +99,8 @@ src/app/diary/
 
 ### 阶段三：高级功能 (可选)
 
-- [ ] 全文搜索（博客/图片）
-- [ ] 图片上传与管理
+- [x] 全文搜索（博客/图片）
+- [x] 图片上传与管理
 - [ ] 评论系统（或接入 Disqus/Giscus）
 - [ ] PWA 支持（离线访问）
 - [ ] 多语言切换（中英文）
@@ -127,6 +127,19 @@ src/app/diary/
 ---
 
 ## 更新日志
+
+- 2025-01-14: **阶段三部分完成** - 全文搜索与图片管理
+  - **全文搜索功能**：
+    - 新增 `src/app/diary/utils/searchUtils.js` - 搜索工具函数，支持博客和图片的全文检索
+    - 新增 `src/app/diary/components/GlobalSearch.jsx` - 全局搜索组件，支持快捷键 (⌘K/Ctrl+K) 和搜索建议
+    - 新增 `src/app/diary/pages/SearchResults.jsx` - 搜索结果页面，支持按类型筛选（博客/图集/全部）
+  - **图片上传与管理功能**：
+    - 新增 `src/app/diary/components/PhotoUpload.jsx` - 图片上传组件，支持拖拽上传、多图选择、元数据编辑
+    - 新增 `src/app/diary/pages/PhotoManager.jsx` - 图片管理页面，支持网格/列表视图、批量选择、编辑、删除
+    - 支持自定义图片持久化到 SQLite/MySQL/PostgreSQL（通过统一存储接口）
+    - 支持编辑图片元数据（标题、地点、年份、标签）
+    - **存储优化**：图片管理使用与旅行规划相同的统一存储接口，默认使用 SQLite，可配置切换到 MySQL/PostgreSQL
+  - **首页更新**：新增「全文搜索」和「图片管理」导航入口
 
 - 2025-01-13: **问题修复** - Bug 修复与存储功能增强
   - **问题修复**：

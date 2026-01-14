@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../contexts/ThemeContext';
 import {
   saveTravelPlan,
-  getTravelPlansSync,
-  deleteTravelPlanSync,
+  getTravelPlans,
+  deleteTravelPlan,
   getStorageInfo,
   switchStorage
 } from '../utils/storage';
@@ -14,7 +14,7 @@ import { StorageType } from '../utils/storageConfig';
 /**
  * 旅行规划页面
  * 智能生成旅行计划，支持保存/收藏功能
- * 支持多种存储方式：localStorage、SQLite、MySQL、PostgreSQL
+ * 支持多种存储方式：SQLite、MySQL、PostgreSQL
  */
 const Planner = () => {
   const { theme } = useTheme();
@@ -60,20 +60,13 @@ const Planner = () => {
     loadSavedPlans();
   }, []);
 
-  const loadSavedPlans = () => {
-    const plans = getTravelPlansSync();
+  const loadSavedPlans = async () => {
+    const plans = await getTravelPlans();
     setSavedPlans(plans);
   };
 
   // 存储方式选项
   const storageOptions = [
-    {
-      value: StorageType.LOCAL_STORAGE,
-      label: '本地存储',
-      desc: '浏览器内置，无需配置',
-      icon: 'fa-browser',
-      enabled: true
-    },
     {
       value: StorageType.SQLITE,
       label: 'SQLite',
@@ -97,12 +90,12 @@ const Planner = () => {
     }
   ];
 
-  const handleStorageSwitch = (newType) => {
+  const handleStorageSwitch = async (newType) => {
     const result = switchStorage(newType);
     if (result.success) {
       showNotification(result.message, 'success');
       setStorageInfo(getStorageInfo());
-      loadSavedPlans(); // 重新加载计划
+      await loadSavedPlans(); // 重新加载计划
     }
   };
 
@@ -116,21 +109,21 @@ const Planner = () => {
     setTimeout(() => setNotification(null), 3000);
   };
 
-  const handleSavePlan = () => {
+  const handleSavePlan = async () => {
     if (!formData.destination || !formData.startDate || !formData.days) {
       showNotification('请先填写完整的旅行信息', 'error');
       return;
     }
 
-    const newPlan = saveTravelPlan(formData);
-    loadSavedPlans();
+    await saveTravelPlan(formData);
+    await loadSavedPlans();
     showNotification('计划已保存！');
     setShowSavedPlans(true);
   };
 
-  const handleDeletePlan = (id) => {
-    deleteTravelPlanSync(id);
-    loadSavedPlans();
+  const handleDeletePlan = async (id) => {
+    await deleteTravelPlan(id);
+    await loadSavedPlans();
     showNotification('计划已删除', 'info');
   };
 
@@ -144,13 +137,13 @@ const Planner = () => {
     setShowSavedPlans(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsGenerating(true);
 
     // 保存当前计划
-    saveTravelPlan(formData);
-    loadSavedPlans();
+    await saveTravelPlan(formData);
+    await loadSavedPlans();
 
     // 模拟 AI 生成过程
     setTimeout(() => {
@@ -491,8 +484,7 @@ const Planner = () => {
             <i className="fas fa-cog"></i>
             存储设置
             <span className="px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded text-xs">
-              {storageInfo.currentType === 'localStorage' ? '本地存储' :
-               storageInfo.currentType === 'sqlite' ? 'SQLite' :
+              {storageInfo.currentType === 'sqlite' ? 'SQLite' :
                storageInfo.currentType === 'mysql' ? 'MySQL' : 'PostgreSQL'}
             </span>
           </button>
