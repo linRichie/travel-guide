@@ -9,6 +9,48 @@ import { storageConfig } from './storageConfig.js';
 let db = null;
 let SQL = null;
 
+// IndexedDB 连接缓存（避免频繁打开连接导致数据竞争）
+let idbInstance = null;
+let idbInitPromise = null;
+
+/**
+ * 获取 IndexedDB 实例（单例模式）
+ */
+const getIndexedDB = () => {
+  if (idbInstance) {
+    return Promise.resolve(idbInstance);
+  }
+
+  if (idbInitPromise) {
+    return idbInitPromise;
+  }
+
+  idbInitPromise = new Promise((resolve, reject) => {
+    const request = indexedDB.open('TravelPlansDB', 1);
+
+    request.onerror = () => {
+      console.error('IndexedDB 打开失败:', request.error);
+      idbInitPromise = null;
+      reject(request.error);
+    };
+
+    request.onsuccess = () => {
+      idbInstance = request.result;
+      console.log('IndexedDB 实例已缓存');
+      resolve(idbInstance);
+    };
+
+    request.onupgradeneeded = (event) => {
+      const dbInstance = event.target.result;
+      if (!dbInstance.objectStoreNames.contains('sqlite_db')) {
+        dbInstance.createObjectStore('sqlite_db');
+      }
+    };
+  });
+
+  return idbInitPromise;
+};
+
 /**
  * 初始化 SQLite 数据库
  */
@@ -131,20 +173,17 @@ const createTables = () => {
  * 保存到 IndexedDB（持久化 SQLite 数据库）
  */
 const saveToIndexedDB = () => {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('TravelPlansDB', 1);
-
-    request.onerror = () => {
-      console.error('IndexedDB 打开失败:', request.error);
-      reject(request.error);
-    };
-
-    request.onsuccess = () => {
-      const dbInstance = request.result;
+  return getIndexedDB().then((dbInstance) => {
+    return new Promise((resolve, reject) => {
       const transaction = dbInstance.transaction(['sqlite_db'], 'readwrite');
       const store = transaction.objectStore('sqlite_db');
 
       try {
+        // 验证数据：在导出前检查 photos 表
+        const verifyResult = db.exec('SELECT COUNT(*) FROM photos');
+        const photoCount = verifyResult[0]?.values[0]?.[0] || 0;
+        console.log('保存前验证: photos 表有', photoCount, '条记录');
+
         // 导出数据库为二进制数组
         const data = db.export();
         store.put({ id: 'main', data: data, timestamp: Date.now() }, 'sqlite_db');
@@ -165,14 +204,7 @@ const saveToIndexedDB = () => {
         console.error('IndexedDB 保存失败:', transaction.error);
         reject(transaction.error);
       };
-    };
-
-    request.onupgradeneeded = (event) => {
-      const dbInstance = event.target.result;
-      if (!dbInstance.objectStoreNames.contains('sqlite_db')) {
-        dbInstance.createObjectStore('sqlite_db');
-      }
-    };
+    });
   });
 };
 
@@ -181,16 +213,8 @@ const saveToIndexedDB = () => {
  * @returns {Promise<SQL.Database|null>} 返回加载的数据库实例，如果没有则返回 null
  */
 const loadFromIndexedDB = () => {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('TravelPlansDB', 1);
-
-    request.onerror = () => {
-      console.error('IndexedDB 打开失败:', request.error);
-      resolve(null);
-    };
-
-    request.onsuccess = () => {
-      const dbInstance = request.result;
+  return getIndexedDB().then((dbInstance) => {
+    return new Promise((resolve) => {
       const transaction = dbInstance.transaction(['sqlite_db'], 'readonly');
       const store = transaction.objectStore('sqlite_db');
       const getRequest = store.get('main');
@@ -200,7 +224,17 @@ const loadFromIndexedDB = () => {
           try {
             // 从保存的数据加载数据库
             const loadedDb = new SQL.Database(getRequest.result.data);
-            console.log('从 IndexedDB 加载 SQLite 数据库成功');
+            console.log('从 IndexedDB 加载 SQLite 数据库成功, 数据大小:', getRequest.result.data.length, '字节');
+
+            // 验证加载的数据
+            try {
+              const verifyResult = loadedDb.exec('SELECT COUNT(*) FROM photos');
+              const photoCount = verifyResult[0]?.values[0]?.[0] || 0;
+              console.log('加载后验证: photos 表有', photoCount, '条记录');
+            } catch (e) {
+              console.log('加载后验证: photos 表不存在或查询失败', e);
+            }
+
             resolve(loadedDb);
           } catch (error) {
             console.error('加载数据库失败:', error);
@@ -221,14 +255,10 @@ const loadFromIndexedDB = () => {
         console.error('IndexedDB 事务失败:', transaction.error);
         resolve(null);
       };
-    };
-
-    request.onupgradeneeded = (event) => {
-      const dbInstance = event.target.result;
-      if (!dbInstance.objectStoreNames.contains('sqlite_db')) {
-        dbInstance.createObjectStore('sqlite_db');
-      }
-    };
+    });
+  }).catch((error) => {
+    console.error('获取 IndexedDB 实例失败:', error);
+    return Promise.resolve(null);
   });
 };
 
@@ -374,28 +404,44 @@ export const savePhotosSQLite = async (photos) => {
   const savedPhotos = [];
   const now = new Date().toISOString();
 
-  for (const photo of photos) {
-    const stmt = db.prepare(`
-      INSERT INTO photos (title, location, photo_date, img_url, tags, exif_data, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `);
+  // 使用事务确保数据完整性
+  db.exec('BEGIN TRANSACTION');
 
-    stmt.run([
-      photo.title,
-      photo.location || '',
-      photo.date || '',
-      photo.img,
-      JSON.stringify(photo.tags || []),
-      JSON.stringify(photo.exif || null),
-      now
-    ]);
-    stmt.free();
+  try {
+    for (const photo of photos) {
+      const stmt = db.prepare(`
+        INSERT INTO photos (title, location, photo_date, img_url, tags, exif_data, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `);
 
-    const result = db.exec('SELECT last_insert_rowid() as id');
-    savedPhotos.push({ ...photo, id: result[0].values[0][0], isCustom: true, createdAt: now });
+      stmt.run([
+        photo.title,
+        photo.location || '',
+        photo.date || '',
+        photo.img,
+        JSON.stringify(photo.tags || []),
+        JSON.stringify(photo.exif || null),
+        now
+      ]);
+      stmt.free();
+
+      const result = db.exec('SELECT last_insert_rowid() as id');
+      savedPhotos.push({ ...photo, id: result[0].values[0][0], isCustom: true, createdAt: now });
+    }
+
+    // 提交事务
+    db.exec('COMMIT');
+    console.log('SQLite savePhotosSQLite: 成功插入', savedPhotos.length, '条记录');
+  } catch (error) {
+    // 回滚事务
+    try {
+      db.exec('ROLLBACK');
+    } catch (e) {
+      // 忽略回滚错误
+    }
+    console.error('SQLite savePhotosSQLite: 保存失败，已回滚', error);
+    throw error;
   }
-
-  console.log('SQLite savePhotosSQLite: 成功插入', savedPhotos.length, '条记录');
 
   // 自动保存到 IndexedDB
   if (storageConfig.sqlite.autoSave) {
