@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AMapLoader from '@amap/amap-jsapi-loader';
-import { 
-  Mountain, 
-  Landmark, 
-  MapPin, 
+import { useTheme } from '../../../contexts/ThemeContext';
+import {
+  Mountain,
+  Landmark,
+  MapPin,
   CalendarDays,
   Clock,
   Twitter,
@@ -13,6 +14,8 @@ import {
 } from 'lucide-react';
 
 const AnhuiTravelGuide = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [activeSection, setActiveSection] = useState(0);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const mapContainerRef = useRef(null);
@@ -142,7 +145,7 @@ const AnhuiTravelGuide = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden">
+    <div className={`min-h-screen font-sans overflow-x-hidden transition-colors duration-300 ${isDark ? 'bg-black text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center section">
         <div className="absolute inset-0 overflow-hidden">

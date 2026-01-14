@@ -1,10 +1,13 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../../../contexts/ThemeContext';
 import { Map, Compass, Mountain, Trees, Flag, Calendar, Plane, Hotel, Utensils, MapPin, ArrowRight } from 'lucide-react';
 import AMapLoader from '@amap/amap-jsapi-loader';
 
 const SichuanTravel = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [activeTab, setActiveTab] = useState('april');
   const [activePlan, setActivePlan] = useState('plan1');
   const mapContainerRef = useRef(null);
@@ -404,7 +407,7 @@ const SichuanTravel = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-black text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* 顶部导航 */}
       <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-800">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">

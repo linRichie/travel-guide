@@ -2,8 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Map, Castle, Mountain, Trees, Landmark, MountainSnow, Waves, Factory, Church, Tent, Flag, GalleryHorizontal, Home, CalendarDays } from 'lucide-react';
 import AMapLoader from '@amap/amap-jsapi-loader';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 const ShaanxiTravelGuide = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [activeSection, setActiveSection] = useState('overview');
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const mapContainerRef = useRef(null);
@@ -77,9 +80,9 @@ const ShaanxiTravelGuide = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden">
+    <div className={`min-h-screen ${isDark ? 'bg-black text-white' : 'bg-white text-gray-900'} font-sans overflow-x-hidden`}>
       {/* 导航条 */}
-      <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-md p-4 border-b border-orange-500/20">
+      <nav className={`sticky top-0 z-50 ${isDark ? 'bg-black/80 border-orange-500/20' : 'bg-white/80 border-orange-500/30'} backdrop-blur-md p-4 border-b`}>
         <div className="container mx-auto flex justify-between items-center">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -93,14 +96,14 @@ const ShaanxiTravelGuide = () => {
               <button
                 key={item}
                 onClick={() => scrollToSection(item)}
-                className={`${activeSection === item ? 'text-orange-500' : 'text-gray-400'
+                className={`${activeSection === item ? 'text-orange-500' : isDark ? 'text-gray-400' : 'text-gray-600'
                   } hover:text-orange-400 transition-colors uppercase text-sm font-medium`}
               >
                 {item}
               </button>
             ))}
           </div>
-          <button className="md:hidden text-gray-400 hover:text-orange-500">
+          <button className={`md:hidden ${isDark ? 'text-gray-400' : 'text-gray-600'} hover:text-orange-500`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="3" y1="12" x2="21" y2="12"></line>
               <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -112,7 +115,7 @@ const ShaanxiTravelGuide = () => {
 
       {/* 主标题区 */}
       <header id="overview" className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/90 to-black/70 z-10"></div>
+        <div className={`absolute inset-0 bg-gradient-to-b ${isDark ? 'from-black/90 to-black/70' : 'from-white/90 to-white/70'} z-10`}></div>
         <div className="absolute inset-0 flex items-center justify-center opacity-20">
           <div className="w-full h-full bg-[url('https://s.coze.cn/t/reQ4FqZiA-Y/')] bg-cover bg-center"></div>
         </div>
@@ -123,10 +126,10 @@ const ShaanxiTravelGuide = () => {
           transition={{ duration: 0.8 }}
           className="relative z-20 text-center px-4"
         >
-          <h1 className="text-6xl md:text-8xl font-bold mb-6">
+          <h1 className={`text-6xl md:text-8xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             <span className="text-orange-500">陕西</span>旅游指南
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className={`text-xl md:text-2xl ${isDark ? 'text-gray-300' : 'text-gray-700'} mb-8 max-w-2xl mx-auto`}>
             EXPLORE THE CULTURAL HEART OF CHINA
           </p>
           <motion.button
@@ -156,7 +159,7 @@ const ShaanxiTravelGuide = () => {
       </header>
 
       {/* 景点统计区 */}
-      <section className="py-20 bg-gradient-to-b from-black to-gray-900">
+      <section className={`py-20 bg-gradient-to-b ${isDark ? 'from-black to-gray-900' : 'from-white to-gray-50'}`}>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -166,31 +169,31 @@ const ShaanxiTravelGuide = () => {
           >
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-gray-900/50 border border-orange-500/20 rounded-xl p-6 text-center"
+              className={`${isDark ? 'bg-gray-900/50 border-orange-500/20' : 'bg-white border-orange-500/30'} border rounded-xl p-6 text-center`}
             >
               <div className="text-5xl font-bold text-orange-500 mb-2">20+</div>
-              <div className="text-gray-400 uppercase text-sm">热门景点</div>
+              <div className={`uppercase text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>热门景点</div>
             </motion.div>
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-gray-900/50 border border-orange-500/20 rounded-xl p-6 text-center"
+              className={`${isDark ? 'bg-gray-900/50 border-orange-500/20' : 'bg-white border-orange-500/30'} border rounded-xl p-6 text-center`}
             >
               <div className="text-5xl font-bold text-orange-500 mb-2">5</div>
-              <div className="text-gray-400 uppercase text-sm">世界遗产</div>
+              <div className={`uppercase text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>世界遗产</div>
             </motion.div>
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-gray-900/50 border border-orange-500/20 rounded-xl p-6 text-center"
+              className={`${isDark ? 'bg-gray-900/50 border-orange-500/20' : 'bg-white border-orange-500/30'} border rounded-xl p-6 text-center`}
             >
               <div className="text-5xl font-bold text-orange-500 mb-2">3000+</div>
-              <div className="text-gray-400 uppercase text-sm">年历史</div>
+              <div className={`uppercase text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>年历史</div>
             </motion.div>
             <motion.div
               whileHover={{ y: -10 }}
-              className="bg-gray-900/50 border border-orange-500/20 rounded-xl p-6 text-center"
+              className={`${isDark ? 'bg-gray-900/50 border-orange-500/20' : 'bg-white border-orange-500/30'} border rounded-xl p-6 text-center`}
             >
               <div className="text-5xl font-bold text-orange-500 mb-2">4</div>
-              <div className="text-gray-400 uppercase text-sm">季节美景</div>
+              <div className={`uppercase text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>季节美景</div>
             </motion.div>
           </motion.div>
 
@@ -198,7 +201,7 @@ const ShaanxiTravelGuide = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-bold mb-16 text-center"
+            className={`text-4xl md:text-6xl font-bold mb-16 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}
           >
             <span className="text-orange-500">陕西</span>必游景点
           </motion.h2>
@@ -206,7 +209,7 @@ const ShaanxiTravelGuide = () => {
       </section>
 
       {/* 景点展示区 */}
-      <section id="attractions" className="py-20 bg-gray-900">
+      <section id="attractions" className={`py-20 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {attractions.map((attraction, index) => (

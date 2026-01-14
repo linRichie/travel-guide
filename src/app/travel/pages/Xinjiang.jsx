@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../../../contexts/ThemeContext';
 import {
   Plane,
   Mountain,
@@ -19,6 +20,8 @@ import {
 import AMapLoader from '@amap/amap-jsapi-loader';
 
 const XinjiangTravel = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const mapContainerRef = useRef(null);
   const mapSDK = useRef();
   const mapInstance = useRef();
@@ -193,7 +196,7 @@ const XinjiangTravel = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-gray-100 font-sans">
+    <div className={`min-h-screen font-sans transition-colors duration-300 ${isDark ? 'bg-black text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
       {/* 主视觉区 */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="text-center z-10">

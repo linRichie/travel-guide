@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../../contexts/ThemeContext';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import { Line, Pie } from 'react-chartjs-2';
 
@@ -11,6 +12,8 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
  * 基于原 西藏15 天行程-Genspark-Create.html 转换而来
  */
 const TibetTravel = () => {
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     // 温度图表数据
     const temperatureData = {
         labels: ['拉萨', '林芝', '波密', '八宿', '理塘', '康定', '成都'],
@@ -256,7 +259,7 @@ const TibetTravel = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans">
+        <div className={`min-h-screen font-sans transition-colors duration-300 ${isDark ? 'bg-black text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
             {/* Header */}
             <header className="bg-gradient-to-br from-purple-600 to-indigo-700 text-white py-16 px-4">
                 <div className="max-w-6xl mx-auto text-center">

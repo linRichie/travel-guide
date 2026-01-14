@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MapPin, 
-  Plane, 
-  Train, 
-  Car, 
-  Sun, 
-  Moon, 
-  Camera, 
-  Utensils, 
+import {
+  MapPin,
+  Plane,
+  Train,
+  Car,
+  Sun,
+  Moon,
+  Camera,
+  Utensils,
   ShoppingBag,
   Calendar,
   Clock,
@@ -20,8 +20,11 @@ import {
   Ticket,
   Map
 } from 'lucide-react';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 const FujianTravel = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [activeTrip, setActiveTrip] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const containerRef = useRef(null);
@@ -479,11 +482,15 @@ const FujianTravel = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div className={`min-h-screen ${isDark ? 'bg-black text-white' : 'bg-white text-gray-900'} font-sans`}>
       {/* 导航栏 - 调整定位和样式 */}
       <motion.nav
         className={`sticky top-[64px] left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled ? 'bg-black/90 backdrop-blur-md py-3 shadow-lg' : 'bg-transparent py-5'
+          isScrolled
+            ? isDark
+              ? 'bg-black/90 backdrop-blur-md py-3 shadow-lg'
+              : 'bg-white/90 backdrop-blur-md py-3 shadow-lg border-b border-gray-200'
+            : 'bg-transparent py-5'
         }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -503,7 +510,7 @@ const FujianTravel = () => {
                 key={index}
                 onClick={() => setActiveTrip(index)}
                 className={`relative text-lg font-medium ${
-                  activeTrip === index ? 'text-orange-500' : 'text-gray-400 hover:text-white'
+                  activeTrip === index ? 'text-orange-500' : isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                 }`}
                 whileHover={{ scale: 1.05 }}
               >
@@ -519,7 +526,7 @@ const FujianTravel = () => {
             ))}
           </div>
 
-          <button className="md:hidden text-gray-400 hover:text-white">
+          <button className={`md:hidden ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -529,27 +536,27 @@ const FujianTravel = () => {
 
       {/* 主标题 - 调整顶部间距 */}
       <header className="relative h-screen flex items-center justify-center overflow-hidden mt-[64px]">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black/30 z-10"></div>
+        <div className={`absolute inset-0 bg-gradient-to-b ${isDark ? 'from-black/80 to-black/30' : 'from-white/80 to-white/30'} z-10`}></div>
         <div className="absolute inset-0 flex items-center justify-center">
-          <motion.div 
-            className="w-full h-full bg-gray-900 opacity-30"
+          <motion.div
+            className={`w-full h-full ${isDark ? 'bg-gray-900' : 'bg-gray-100'} opacity-30`}
             initial={{ scale: 1.2 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.5 }}
           />
         </div>
-        
+
         <div className="relative z-20 text-center px-6">
-          <motion.h1 
-            className="text-6xl md:text-8xl font-bold mb-6"
+          <motion.h1
+            className={`text-6xl md:text-8xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <span className="text-orange-500">福建</span>五一<span className="text-orange-500">4天</span>游
           </motion.h1>
-          <motion.p 
-            className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto"
+          <motion.p
+            className={`text-xl md:text-2xl ${isDark ? 'text-gray-300' : 'text-gray-700'} max-w-2xl mx-auto`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -598,18 +605,18 @@ const FujianTravel = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 text-center">
+          <h2 className={`text-4xl md:text-6xl font-bold mb-6 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
             <span className="text-orange-500">5</span>套精选行程方案
           </h2>
-          <p className="text-xl text-gray-400 text-center max-w-3xl mx-auto">
+          <p className={`text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'} text-center max-w-3xl mx-auto`}>
             从海滨城市到茶山古镇，体验福建的多元文化与自然风光
           </p>
         </motion.div>
 
         {/* 移动端行程选择 */}
         <div className="md:hidden mb-12">
-          <select 
-            className="w-full bg-gray-900 border border-gray-800 text-white p-4 rounded-lg"
+          <select
+            className={`w-full ${isDark ? 'bg-gray-900 border-gray-800 text-white' : 'bg-white border-gray-300 text-gray-900'} p-4 rounded-lg border`}
             value={activeTrip}
             onChange={(e) => setActiveTrip(parseInt(e?.target?.value))}
           >
@@ -636,7 +643,7 @@ const FujianTravel = () => {
               >
                 <MapPin className="text-orange-500" size={28} />
               </motion.div>
-              <h3 className="text-3xl md:text-5xl font-bold">
+              <h3 className={`text-3xl md:text-5xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 {trips?.[activeTrip]?.title}
               </h3>
             </div>
@@ -645,14 +652,14 @@ const FujianTravel = () => {
               {trips?.[activeTrip]?.days?.map((day, dayIndex) => (
                 <motion.div
                   key={dayIndex}
-                  className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800"
+                  className={`${isDark ? 'bg-gray-900 border-gray-800' : 'bg-gray-50 border-gray-200'} rounded-xl overflow-hidden border`}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: dayIndex * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ y: -10 }}
                 >
-                  <div className="p-6 border-b border-gray-800 bg-gradient-to-r from-gray-900 to-gray-800">
+                  <div className={`p-6 border-b ${isDark ? 'border-gray-800 bg-gradient-to-r from-gray-900 to-gray-800' : 'border-gray-200 bg-gradient-to-r from-gray-50 to-white'}`}>
                     <h4 className="text-xl font-bold mb-2">
                       <span className="text-orange-500">Day {dayIndex + 1}</span> - {day?.title}
                     </h4>
@@ -673,7 +680,7 @@ const FujianTravel = () => {
                           </div>
                           <div>
                             <div className="text-orange-500 font-medium">{activity?.time}</div>
-                            <div className="text-gray-300">{activity?.description}</div>
+                            <div className={isDark ? 'text-gray-300' : 'text-gray-700'}>{activity?.description}</div>
                           </div>
                         </motion.li>
                       ))}
@@ -692,7 +699,7 @@ const FujianTravel = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <h3 className="text-2xl md:text-3xl font-bold mb-6">
+          <h3 className={`text-2xl md:text-3xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             还有<span className="text-orange-500">4</span>套精彩行程等你探索
           </h3>
           <div className="flex flex-wrap justify-center gap-4 mt-8">
@@ -701,7 +708,7 @@ const FujianTravel = () => {
                 <motion.button
                   key={index}
                   onClick={() => setActiveTrip(index)}
-                  className="px-6 py-3 bg-gray-900 border border-gray-800 rounded-lg hover:bg-gray-800 transition-colors"
+                  className={`px-6 py-3 ${isDark ? 'bg-gray-900 border-gray-800 hover:bg-gray-800' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'} rounded-lg transition-colors border`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -714,19 +721,19 @@ const FujianTravel = () => {
       </div>
 
       {/* 页脚 */}
-      <footer className="bg-gray-900 py-12 border-t border-gray-800">
+      <footer className={`${isDark ? 'bg-gray-900 border-gray-800' : 'bg-gray-50 border-gray-200'} py-12 border-t`}>
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h4 className="text-xl font-bold mb-4">福建五一4天游</h4>
-              <p className="text-gray-400">
+              <h4 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>福建五一4天游</h4>
+              <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
                 5套精心设计的行程方案，体验福建的多元魅力
               </p>
             </div>
-            
+
             <div>
-              <h4 className="text-xl font-bold mb-4">作者信息</h4>
-              <p className="text-gray-400 mb-2">Wang L. Richie</p>
+              <h4 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>作者信息</h4>
+              <p className={isDark ? 'text-gray-400 mb-2' : 'text-gray-600 mb-2'}>Wang L. Richie</p>
               <div className="flex space-x-4">
                 <a href="https://x.com/Jone12suny" className="text-orange-500 hover:text-orange-400" target="_blank" rel="noopener noreferrer">
                   Twitter/X
@@ -739,8 +746,8 @@ const FujianTravel = () => {
             
             <div>
               {/* <h4 className="text-xl font-bold mb-4">版权信息</h4> */}
-              <p className="text-gray-400">© 2025 All Rights Reserved</p>
-              <p className="text-gray-400 mt-2">
+              <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>© 2025 All Rights Reserved</p>
+              <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} mt-2`}>
                 created by <a href="#" className="text-orange-500 hover:underline">Wang L. Richie </a> 
               </p>
             </div>
