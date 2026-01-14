@@ -25,6 +25,7 @@ import DiaryHome from './app/diary/pages/DiaryHome';
 import About from './app/diary/pages/About';
 import Gallery from './app/diary/pages/Gallery';
 import Planner from './app/diary/pages/Planner';
+import TravelPlans from './app/diary/pages/TravelPlans';
 import Stats from './app/diary/pages/Stats';
 import BlogList from './app/diary/pages/BlogList';
 import BlogPost from './app/diary/pages/BlogPost';
@@ -67,6 +68,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="planner" element={<Planner />} />
+          <Route path="plans" element={<TravelPlans />} />
           <Route path="stats" element={<Stats />} />
           <Route path="blog" element={<BlogList />} />
           <Route path="blog/:id" element={<BlogPost />} />

@@ -37,6 +37,14 @@ const DiaryHome = () => {
       to: '/diary/planner'
     },
     {
+      id: 'plans',
+      title: '旅行规划库',
+      description: '查看和管理计划',
+      icon: 'fa-suitcase',
+      color: 'from-cyan-500 to-blue-600',
+      to: '/diary/plans'
+    },
+    {
       id: 'stats',
       title: '旅行统计',
       description: '数据可视化展示',

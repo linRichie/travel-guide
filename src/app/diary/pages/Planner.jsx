@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../../../contexts/ThemeContext';
 import {
   saveTravelPlan,
@@ -20,6 +20,8 @@ const Planner = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
     destination: '',
     startDate: '',
@@ -32,6 +34,7 @@ const Planner = () => {
   const [showStorageSettings, setShowStorageSettings] = useState(false);
   const [notification, setNotification] = useState(null);
   const [storageInfo, setStorageInfo] = useState(getStorageInfo());
+  const [editingPlanId, setEditingPlanId] = useState(null); // 追踪正在编辑的计划ID
 
   // 可用的旅游目的地（来自旅游指南模块）
   const destinations = [
@@ -59,6 +62,37 @@ const Planner = () => {
   useEffect(() => {
     loadSavedPlans();
   }, []);
+
+  // 处理从 TravelPlans 页面传入的计划数据
+  useEffect(() => {
+    if (location.state) {
+      if (location.state.loadPlan) {
+        // 加载计划到表单（用于查看）
+        const plan = location.state.loadPlan;
+        setFormData({
+          destination: plan.destination || '',
+          startDate: plan.startDate || '',
+          days: plan.days?.toString() || '',
+          budget: plan.budget || 'comfortable'
+        });
+        setEditingPlanId(null); // 加载模式不设置编辑ID
+        showNotification('已加载计划: ' + plan.destination, 'info');
+      } else if (location.state.editPlan) {
+        // 加载计划到表单（用于编辑）
+        const plan = location.state.editPlan;
+        setFormData({
+          destination: plan.destination || '',
+          startDate: plan.startDate || '',
+          days: plan.days?.toString() || '',
+          budget: plan.budget || 'comfortable'
+        });
+        setEditingPlanId(plan.id); // 设置编辑ID
+        showNotification('编辑模式: ' + plan.destination, 'info');
+      }
+      // 清除 state 以避免重复加载
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.state]);
 
   const loadSavedPlans = async () => {
     const plans = await getTravelPlans();
@@ -117,20 +151,21 @@ const Planner = () => {
 
     // 构造完整的计划对象，包含必需的 id 字段
     const planData = {
-      id: `plan_${Date.now()}`, // 生成唯一 ID
+      id: editingPlanId || `plan_${Date.now()}`, // 编辑时使用现有ID，否则生成新ID
       destination: formData.destination,
       startDate: formData.startDate,
       days: parseInt(formData.days),
       budget: formData.budget || 'comfortable',
       itinerary: null, // 可以后续扩展存储生成的行程
-      createdAt: new Date().toISOString()
+      createdAt: editingPlanId ? savedPlans.find(p => p.id === editingPlanId)?.createdAt : new Date().toISOString()
     };
 
     try {
       await saveTravelPlan(planData);
       await loadSavedPlans();
-      showNotification('计划已保存！');
+      showNotification(editingPlanId ? '计划已更新！' : '计划已保存！');
       setShowSavedPlans(true);
+      setEditingPlanId(null); // 清除编辑状态
     } catch (error) {
       console.error('保存计划失败:', error);
       showNotification('保存失败: ' + (error.message || '未知错误'), 'error');
