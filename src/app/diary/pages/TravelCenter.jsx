@@ -541,7 +541,7 @@ const TravelCenter = () => {
               <div className={`${isDark ? 'bg-gray-900/50 border-white/10' : 'bg-white border-gray-200'} border rounded-2xl shadow-xl p-6 md:p-8`}>
                 <h3 className={`text-xl font-bold mb-6 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   <i className="fas fa-globe-asia mr-2 text-purple-400"></i>
-                  旅行足迹
+                  旅行记录地图
                 </h3>
 
                 {/* 世界地图 */}

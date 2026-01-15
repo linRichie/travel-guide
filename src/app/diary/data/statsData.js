@@ -26,7 +26,7 @@ export const statsData = [
   }
 ];
 
-// 旅行足迹数据（用于地图标记）
+// 旅行目的地数据（用于地图标记）
 export const travelFootprint = [
   { country: '中国', cities: ['北京', '上海', '成都', '西安', '桂林'], lat: 35.8617, lng: 104.1954 },
   { country: '日本', cities: ['东京', '京都', '大阪'], lat: 36.2048, lng: 138.2529 },
