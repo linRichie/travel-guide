@@ -3,8 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../contexts/ThemeContext';
 import PlanCard from '../components/PlanCard';
-import PlanCharts from '../components/PlanCharts';
-import WorldMap from '../components/WorldMap';
+import BudgetPieChart from '../components/BudgetPieChart';
+import DestinationBarChart from '../components/DestinationBarChart';
+import MonthBarChart from '../components/MonthBarChart';
+import DaysBarChart from '../components/DaysBarChart';
+import AMapFootprint from '../components/AMapFootprint';
 import PhotoTrendChart from '../components/PhotoTrendChart';
 import { statsData, travelFootprint, yearlyTrips, continentData, photoTrendData } from '../data/statsData';
 import { getTravelPlans, deleteTravelPlan } from '../utils/storage';
@@ -506,7 +509,53 @@ const TravelCenter = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.2 }}
             >
-              <PlanCharts plans={plans} />
+              <div className="space-y-6">
+                {/* 统计摘要卡片 */}
+                <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 ${isDark ? 'bg-gray-900/50 border-white/10' : 'bg-white border-gray-200'} border rounded-2xl p-6`}>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-purple-400">{plans.length}</p>
+                    <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>总计划数</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-blue-400">
+                      {plans.length > 0 ? [...new Set(plans.map(p => p.destination))].length : 0}
+                    </p>
+                    <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>目的地数</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-green-400">
+                      {plans.length > 0 ? Math.round(plans.reduce((sum, p) => sum + (p.days || 0), 0) / plans.length) : 0}
+                    </p>
+                    <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>平均天数</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-amber-400">
+                      {plans.reduce((sum, p) => sum + (p.days || 0), 0)}
+                    </p>
+                    <p className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>总天数</p>
+                  </div>
+                </div>
+
+                {/* 图表网格 */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <DestinationBarChart data={
+                    [...new Set(plans.map(p => p.destination))].map(dest => ({
+                      name: dest,
+                      value: plans.filter(p => p.destination === dest).length
+                    })).sort((a, b) => b.value - a.value).slice(0, 5)
+                  } />
+                  <BudgetPieChart data={
+                    ['economy', 'comfortable', 'luxury'].map(type => ({
+                      name: type === 'economy' ? '经济型' : type === 'comfortable' ? '舒适型' : '豪华型',
+                      value: plans.filter(p => p.budget === type).length || 0,
+                      color: type === 'economy' ? '#22c55e' : type === 'comfortable' ? '#8b5cf6' : '#f59e0b'
+                    })).filter(d => d.value > 0)
+                  } />
+                </div>
+
+                <MonthBarChart />
+                <DaysBarChart />
+              </div>
             </motion.div>
           )}
 
@@ -537,26 +586,27 @@ const TravelCenter = () => {
                 ))}
               </div>
 
-              {/* 旅行足迹地图 */}
+              {/* 旅行足迹地图 - 高德地图 */}
               <div className={`${isDark ? 'bg-gray-900/50 border-white/10' : 'bg-white border-gray-200'} border rounded-2xl shadow-xl p-6 md:p-8`}>
                 <h3 className={`text-xl font-bold mb-6 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  <i className="fas fa-globe-asia mr-2 text-purple-400"></i>
+                  <svg className="w-5 h-5 text-purple-400 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2a2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2.5 2.5 0 012.489 2.122 2.5 2.5 0 012.122 2.489A2.5 2.5 0 0016.5 13H17a2.5 2.5 0 002.5-2.5V8a2.5 2.5 0 00-2.448-2.5A2.5 2.5 0 0013 5.565V5a2 2 0 012-2h.945" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12c-1.5 0-3-.4-4-1-4 1-1 4-4 4 9" />
+                  </svg>
                   旅行记录地图
                 </h3>
 
-                {/* 世界地图 */}
-                <div className="mb-8">
-                  <WorldMap visitedCountries={travelFootprint} />
-                </div>
+                {/* 高德地图 */}
+                <AMapFootprint visitedCountries={travelFootprint} />
 
                 {/* 足迹列表 */}
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mt-6">
                   {travelFootprint.map((country, index) => (
                     <motion.div
                       key={country.country}
-                      className={`${isDark ? 'bg-gray-800/50 hover:bg-gray-800' : 'bg-gray-100 hover:bg-gray-200'} rounded-xl p-4 text-center transition-colors duration-300`}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
+                      className={`${isDark ? 'bg-gray-800/50' : 'bg-gray-100'} rounded-xl p-4 text-center transition-colors duration-300 cursor-pointer hover:${isDark ? 'bg-gray-800' : 'bg-gray-200'}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 + index * 0.05 }}
                     >
                       <div className="text-2xl mb-2">
@@ -569,7 +619,7 @@ const TravelCenter = () => {
                         {country.country === '瑞士' && '🇨🇭'}
                       </div>
                       <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{country.country}</div>
-                      <div className={`text-xs mt-1 ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>{country.cities.length} 城市</div>
+                      <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>{country.cities.length} 城市</div>
                     </motion.div>
                   ))}
                 </div>
@@ -577,57 +627,67 @@ const TravelCenter = () => {
 
               {/* 年度旅行统计 */}
               <div className={`${isDark ? 'bg-gray-900/50 border-white/10' : 'bg-white border-gray-200'} border rounded-2xl shadow-xl p-6 md:p-8`}>
-                <h3 className={`text-xl font-bold mb-6 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  <i className="fas fa-chart-line mr-2 text-purple-400"></i>
+                <h3 className={`text-xl font-bold mb-8 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <svg className="w-5 h-5 text-purple-400 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
                   年度旅行记录
                 </h3>
-                <div className="flex items-end justify-between h-40 px-4">
-                  {yearlyTrips.map((trip, index) => (
-                    <motion.div
-                      key={trip.year}
-                      className="flex flex-col items-center"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 + index * 0.1 }}
-                    >
-                      <div className={`text-xs mb-2 ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>{trip.count}次</div>
-                      <div
-                        className="w-8 md:w-12 bg-gradient-to-t from-purple-600 to-blue-500 rounded-t-lg transition-all hover:from-purple-500 hover:to-blue-400"
-                        style={{ height: `${trip.count * 35 + 20}px` }}
-                      ></div>
-                      <div className={`text-xs mt-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{trip.year}</div>
-                    </motion.div>
-                  ))}
+                <div className="flex items-end justify-between h-48 px-4">
+                  {yearlyTrips.map((trip, index) => {
+                    const maxCount = Math.max(...yearlyTrips.map(t => t.count));
+                    const heightPercent = (trip.count / maxCount) * 100;
+
+                    return (
+                      <motion.div
+                        key={trip.year}
+                        className="flex flex-col items-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 + index * 0.1 }}
+                      >
+                        <div className={`text-xs mb-3 font-medium ${trip.count === maxCount ? 'text-purple-400' : isDark ? 'text-gray-500' : 'text-gray-600'}`}>
+                          {trip.count}次
+                        </div>
+                        <div className="w-12 md:w-16 bg-gradient-to-t from-purple-600 to-blue-500 rounded-t-lg transition-all hover:from-purple-500 hover:to-blue-400 shadow-lg shadow-purple-500/20"
+                             style={{ height: `${heightPercent * 0.8}px` }}>
+                        </div>
+                        <div className={`text-xs mt-3 font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{trip.year}</div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* 洲分布统计 */}
               <div className={`${isDark ? 'bg-gray-900/50 border-white/10' : 'bg-white border-gray-200'} border rounded-2xl shadow-xl p-6 md:p-8`}>
-                <h3 className={`text-xl font-bold mb-6 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  <i className="fas fa-pie-chart mr-2 text-purple-400"></i>
+                <h3 className={`text-xl font-bold mb-8 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  <svg className="w-5 h-5 text-purple-400 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 3.055A2.5 2.5 0 0113 5.5v1a2.5 2.5 0 01-4.899 2.122A2.5 2.5 0 0112 10.565V13a2 2 0 012 2v1a2 2 0 104 0V5.945a2.5 2.5 0 01-2.122 2.489A2.5 2.5 0 0110.5 8H17a2.5 2.5 0 002.5-2.5V8a2.5 2.5 0 01-2.122-2.489A2.5 2.5 0 0013 5.565V5a2 2 0 012-2h.945" />
+                  </svg>
                   洲分布统计
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {continentData.map((continent, index) => (
                     <motion.div
                       key={continent.continent}
-                      className={`relative ${isDark ? 'bg-gray-800/50' : 'bg-gray-100'} rounded-xl p-6 overflow-hidden transition-colors duration-300`}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
+                      className={`${isDark ? 'bg-gray-800/50' : 'bg-gray-100'} rounded-xl p-6 text-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/10`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 + index * 0.1 }}
                     >
-                      {/* 进度条背景 */}
-                      <div
-                        className="absolute top-0 left-0 w-full opacity-20"
-                        style={{
-                          height: `${(continent.count / 12) * 100}%`,
-                          backgroundColor: continent.color
-                        }}
-                      ></div>
-                      {/* 内容 */}
-                      <div className="relative z-10">
-                        <div className={`text-3xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{continent.count}</div>
-                        <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>{continent.continent}</div>
+                      <div className={`text-4xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`} style={{ color: continent.color }}>
+                        {continent.count}
+                      </div>
+                      <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>{continent.continent}</div>
+                      <div className={`mt-2 h-1.5 rounded-full ${isDark ? 'bg-gray-700' : 'bg-gray-300'}`}>
+                        <div
+                          className="h-full rounded-full"
+                          style={{
+                            width: `${(continent.count / 12) * 100}%`,
+                            backgroundColor: continent.color
+                          }}
+                        ></div>
                       </div>
                     </motion.div>
                   ))}
