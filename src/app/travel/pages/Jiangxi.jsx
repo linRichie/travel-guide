@@ -353,12 +353,6 @@ const TravelPlans = () => {
                 GitHub
               </a>
             </div>
-                className={isDark ? 'text-gray-400 hover:text-orange-500' : 'text-gray-600 hover:text-orange-500'}
-                className="transition-colors"
-              >
-                GitHub
-              </a>
-            </div>
           </div>
 
           <div className={`mt-12 text-center text-sm ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>
