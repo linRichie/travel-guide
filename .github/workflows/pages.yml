@@ -1,0 +1,18 @@
+# GitHub Pages 配置
+# 确保在仓库 Settings -> Pages -> Source 中设置为 GitHub Actions
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: none
+
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "GitHub Pages 由 deploy.yml 工作流管理"
