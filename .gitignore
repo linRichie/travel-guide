@@ -407,7 +407,7 @@ junit.xml
 *.old
 
 # Package manager files
-package-lock.json
+# package-lock.json  # 取消忽略，确保 CI 与本地依赖版本一致
 yarn.lock
 pnpm-lock.yaml
 
