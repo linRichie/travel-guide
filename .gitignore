@@ -360,10 +360,12 @@ $RECYCLE.BIN/
 # Project specific
 # Server files
 server/
-*.json
-*.js
-*.mjs
-*.cjs
+
+# 环境变量文件（生产密钥文件不提交）
+.env
+.env.local
+!.env.example
+!.env.production
 
 # Generated files
 *.min.js
